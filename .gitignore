@@ -1,0 +1,10 @@
+# 只發布網頁與前端資料，內部檔案不公開
+reference/
+*.md
+*.py
+*.command
+__pycache__/
+.DS_Store
+_*.html
+data/report.md
+data/report.json

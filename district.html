@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>行政區房市分析 · 貝多房產</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--ink:#122238;--navy:#24395a;--gold:#c9a663;--gold-d:#9d7a38;--paper:#f6f2e8;--paper2:#efe8d9;--card:#fcfaf5;--line:#ddd4c2;--sub:#8a836f;--resale:#3f7d68;--orange:#c15a2b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Noto Sans TC",sans-serif;background:var(--paper);color:var(--ink);line-height:1.65}
+.serif{font-family:"Noto Serif TC",serif}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px}
+a{color:inherit;text-decoration:none}
+.eng{font-family:"Cormorant Garamond",serif;letter-spacing:2px;color:var(--gold-d);font-size:12px;text-transform:uppercase}
+.nav{border-bottom:1px solid var(--line);background:rgba(246,242,232,.92);position:sticky;top:0;z-index:20}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{font-family:"Noto Serif TC",serif;font-weight:700;font-size:17px}.brand span{color:var(--gold-d)}
+.back{font-size:13.5px;color:var(--navy)}
+.head{padding:28px 0 4px;display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.head h1{font-size:31px;font-weight:900}.head h1 span{color:var(--gold-d)}
+select{font-family:inherit;font-size:15px;padding:8px 12px;border:1px solid var(--line);border-radius:3px;background:var(--card)}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.tabs button{padding:8px 18px;font-size:14px;font-weight:700;background:var(--card);border:none;cursor:pointer;color:var(--sub);font-family:inherit}
+.tabs button.on{background:var(--ink);color:var(--paper)}
+.popbar{display:flex;gap:24px;flex-wrap:wrap;padding:13px 18px;background:var(--ink);color:var(--paper);border-radius:4px;margin:18px 0 6px;font-size:14px}
+.popbar b{color:#fff}.popbar .t{font-family:"Noto Serif TC";font-weight:700;color:var(--gold)}.popbar small{color:#b9c0cc;font-size:12px}
+.ov{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+.ov .b{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:15px 17px}
+.ov .k{font-size:12px;color:var(--sub);margin-bottom:6px}
+.ov .v{font-family:"Noto Serif TC",serif;font-size:28px;font-weight:900;line-height:1.1}
+.ov .v small{font-size:12px;color:var(--sub);font-weight:600}
+.ov .s{font-size:12px;color:var(--sub);margin-top:6px}
+.up{color:#c0392b}.down{color:var(--resale)}.flat{color:var(--sub)}
+.rk{display:inline-block;background:var(--paper2);color:var(--gold-d);border-radius:3px;padding:1px 8px;font-weight:700;font-size:13px}
+.sec{margin:30px 0 12px;display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.sec h2{font-family:"Noto Serif TC",serif;font-size:22px;font-weight:700}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:20px 22px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+.chartbox{position:relative;height:290px}
+.read{display:flex;flex-direction:column;gap:0}
+.read .r{display:flex;justify-content:space-between;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line)}
+.read .r:last-child{border:none}
+.read .rk2{font-size:13px;color:var(--sub)}.read .rk2 small{display:block;font-size:11px}
+.read .rv{font-family:"Noto Serif TC",serif;font-size:22px;font-weight:900}
+table.p{width:100%;border-collapse:collapse}
+table.p th,table.p td{padding:12px 10px;border-bottom:1px solid var(--line);font-size:14px}
+table.p th{font-size:12px;color:var(--sub);font-weight:600;text-align:center}
+table.p td.l{text-align:left;color:var(--sub);font-size:13px}
+table.p td{text-align:center;font-family:"Noto Serif TC";font-weight:700;font-size:17px}
+table.p td.mid{background:#f6efe0;color:var(--gold-d)}
+.bar{margin-bottom:10px}
+.bar .lab{display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px}
+.bar .track{height:9px;background:var(--paper2);border-radius:5px;overflow:hidden}
+.bar .fill{height:100%;background:var(--navy)}.bar .fill.g{background:linear-gradient(90deg,var(--navy),var(--gold))}.bar .fill.o{background:var(--orange)}
+.disttabs{display:inline-flex;border:1px solid var(--line);border-radius:3px;overflow:hidden;float:right}
+.disttabs button{padding:6px 14px;font-size:13px;background:var(--card);border:none;cursor:pointer;color:var(--sub);font-family:inherit;font-weight:600}
+.disttabs button.on{background:var(--navy);color:#fff}
+.cmp{background:var(--ink);color:var(--paper);border-radius:4px;padding:20px 22px;display:grid;grid-template-columns:1.4fr 1fr;gap:24px;margin-bottom:16px}
+.cmp .cbar{margin:10px 0}.cmp .cbar .lab{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.cmp .track{height:11px;background:#33445f;border-radius:6px;overflow:hidden}.cmp .fill{height:100%;background:var(--gold)}.cmp .fill.o{background:var(--orange)}
+.cmp .share b{font-family:"Noto Serif TC";font-size:34px;color:var(--gold)}
+.rank .ri{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.rank .no{font-family:"Cormorant Garamond";color:var(--gold-d);font-weight:600;width:26px}
+.rank .rn{flex:1;font-weight:700}.rank .rn small{display:block;color:var(--sub);font-size:11.5px;font-weight:400}
+.rank .rr{text-align:right}.rank .rr b{font-family:"Noto Serif TC";font-size:16px}.rank .rr small{display:block;color:var(--sub);font-size:11.5px}
+.foot{color:var(--sub);font-size:12px;padding:8px 0 50px;line-height:1.9}
+@media(max-width:820px){.ov{grid-template-columns:1fr 1fr}.grid2,.cmp{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html" style="color:inherit">貝多<span>房產</span> · 行政區房市分析</a>
+  <a class="back" href="market.html">← 回成交行情</a>
+</div></nav>
+
+<div class="wrap">
+  <div class="head">
+    <h1 class="serif"><span id="dname">—</span> 房市分析</h1>
+    <select id="dsel" onchange="pick(this.value)"></select>
+    <div class="tabs"><button id="tPre" class="on" onclick="setType('presale')">預售屋</button><button id="tRes" onclick="setType('resale')">中古屋</button></div>
+  </div>
+  <div class="popbar" id="popbar"></div>
+  <div class="ov" id="ov"></div>
+
+  <div class="sec"><span class="eng">Trend</span><h2>成交趨勢</h2></div>
+  <div class="grid2">
+    <div class="panel"><div style="font-weight:700;margin-bottom:4px">成交量與單價軌跡 <small style="color:var(--sub);font-weight:400">近12個月</small></div><div class="chartbox"><canvas id="chart"></canvas></div></div>
+    <div class="panel"><div style="font-weight:700;margin-bottom:6px">期間讀值</div><div class="read" id="read"></div></div>
+  </div>
+
+  <div class="sec"><span class="eng">Core Band</span><h2>主力成交帶</h2><span style="font-size:12px;color:var(--sub)">P25～P75 為中間一半成交的分布範圍</span></div>
+  <div class="panel"><table class="p" id="ptbl"></table></div>
+
+  <div class="cmp" id="cmp"></div>
+
+  <div class="sec"><span class="eng">Distribution</span><h2>產品結構</h2>
+    <div class="disttabs"><button class="on" onclick="setDist('unit')">單價分布</button><button onclick="setDist('total')">總價分布</button><button onclick="setDist('ping')">坪數分布</button></div>
+  </div>
+  <div class="panel"><div id="distbox"></div></div>
+  <div class="grid2">
+    <div class="panel"><div style="font-weight:700;margin-bottom:12px" id="mixTitle">房型分布</div><div id="mix"></div></div>
+    <div class="panel"><div style="font-weight:700;margin-bottom:12px">樓層帶分布</div><div id="floor"></div></div>
+  </div>
+
+  <div id="rankwrap"></div>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+let M=null,POP=null,TYPE='presale',D=null,DIST='unit',chart=null;
+const A=v=>v==null?'—':(+v).toFixed(1);
+const N=v=>v==null?'—':(+v).toLocaleString();
+const trend=p=>p==null?'<span class="flat">—</span>':p>=5?`<span class="up">+${p}%</span>`:p<=-5?`<span class="down">${p}%</span>`:`<span class="flat">${p>0?'+':''}${p}%</span>`;
+const qs=new URLSearchParams(location.search);
+
+Promise.all([fetch('data/market.json').then(r=>r.json()),fetch('data/population.json').then(r=>r.json()).catch(()=>null)]).then(([d,p])=>{M=d;POP=p;
+  const dists=Object.keys(d.presale.d12).sort();
+  D=qs.get('d')&&dists.includes(qs.get('d'))?qs.get('d'):dists[0];
+  if(qs.get('type')==='resale')TYPE='resale';
+  document.getElementById('dsel').innerHTML=dists.map(x=>`<option ${x===D?'selected':''}>${x}</option>`).join('');
+  document.getElementById('tPre').className=TYPE==='presale'?'on':'';document.getElementById('tRes').className=TYPE==='resale'?'on':'';
+  render();
+});
+function pick(v){D=v;render();}
+function setType(t){TYPE=t;document.getElementById('tPre').className=t==='presale'?'on':'';document.getElementById('tRes').className=t==='resale'?'on':'';render();}
+function setDist(k){DIST=k;document.querySelectorAll('.disttabs button').forEach((b,i)=>b.className=(['unit','total','ping'][i]===k)?'on':'');renderDist();}
+
+function render(){
+  document.getElementById('dname').textContent=D;
+  const pop=POP&&POP.districts[D], d=M[TYPE].d12[D];
+  document.getElementById('popbar').innerHTML=pop?`<span class="t">區域概況</span><span>現住人口 <b>${N(pop.pop)}</b> 人</span><span>戶數 <b>${N(pop.households)}</b> 戶</span><span>戶量 <b>${pop.ppl_per_hh}</b> 人/戶</span><span><small>內政部戶籍統計 · ${POP.meta.period}</small></span>`:'<span><small>人口資料整理中</small></span>';
+  if(!d){document.getElementById('ov').innerHTML='<p style="color:var(--sub)">本區近12個月成交樣本不足。</p>';['read','ptbl','cmp','distbox','mix','floor','rankwrap'].forEach(i=>document.getElementById(i).innerHTML='');return;}
+  const pu=d.p_unit||{};
+  document.getElementById('ov').innerHTML=`
+    <div class="b"><div class="k">典型單價 P50（近12月）</div><div class="v">${A(pu.p50)}<small> 萬/坪</small></div><div class="s">前後期 ${trend(d.chg3)}</div></div>
+    <div class="b"><div class="k">主力成交帶 P25–P75</div><div class="v" style="font-size:20px">${A(pu.p25)}–${A(pu.p75)}</div><div class="s">中間一半成交</div></div>
+    <div class="b"><div class="k">近12月成交量</div><div class="v">${N(d.n)}<small> 件</small></div><div class="s">平均每月 ${d.avg_monthly} 件</div></div>
+    <div class="b"><div class="k">占全市成交量</div><div class="v" style="font-size:22px">${d.share}%</div><div class="s">本區 ${d.n} / 全市 ${N(d.city_n)}</div></div>`;
+  // 期間讀值
+  document.getElementById('read').innerHTML=`
+    <div class="r"><div class="rk2">期間成交高點<small>${d.peak_n} 筆成交</small></div><div class="rv" style="color:var(--orange)">${d.peak_month}</div></div>
+    <div class="r"><div class="rk2">平均每月成交<small>近12個月平均</small></div><div class="rv">${d.avg_monthly} 筆</div></div>
+    <div class="r"><div class="rk2">有成交月份<small>近12個月</small></div><div class="rv">${d.active}／12</div></div>
+    <div class="r"><div class="rk2">前後期單價變化<small>前3月 ${A(d.f3)} → 後3月 ${A(d.l3)}</small></div><div class="rv ${d.chg3>=0?'up':'down'}">${d.chg3>0?'+':''}${d.chg3}%</div></div>`;
+  // 主力成交帶
+  const pt=d.p_total||{},pp=d.p_ping||{};
+  document.getElementById('ptbl').innerHTML=`<tr><th style="text-align:left">統計項目</th><th>成交帶下緣 P25</th><th>典型成交 P50</th><th>成交帶上緣 P75</th></tr>
+    <tr><td class="l">成交單價<br>萬/坪</td><td>${A(pu.p25)}</td><td class="mid">${A(pu.p50)}</td><td>${A(pu.p75)}</td></tr>
+    <tr><td class="l">成交總價<br>萬</td><td>${N(pt.p25)}</td><td class="mid">${N(pt.p50)}</td><td>${N(pt.p75)}</td></tr>
+    <tr><td class="l">建物坪數<br>坪</td><td>${A(pp.p25)}</td><td class="mid">${A(pp.p50)}</td><td>${A(pp.p75)}</td></tr>`;
+  // 同期比較
+  const rm=pu.p50||0,cm=d.city_med||0,mx=Math.max(rm,cm)||1;
+  const diff=cm?((rm-cm)/cm*100).toFixed(1):null;
+  document.getElementById('cmp').innerHTML=`
+    <div><div style="font-family:'Noto Serif TC';font-size:18px;font-weight:700;margin-bottom:12px">與桃園市同期比較</div>
+      <div class="cbar"><div class="lab"><span>${D}</span><b>${A(rm)} 萬/坪</b></div><div class="track"><div class="fill o" style="width:${rm/mx*100}%"></div></div></div>
+      <div class="cbar"><div class="lab"><span>桃園市</span><b>${A(cm)} 萬/坪</b></div><div class="track"><div class="fill" style="width:${cm/mx*100}%"></div></div></div>
+      <div style="font-size:12.5px;color:#b9c0cc;margin-top:8px">本區典型單價 ${diff>=0?'高於':'低於'}全市同期 ${Math.abs(diff)}%</div></div>
+    <div class="share"><div style="font-size:13px;color:#b9c0cc">全市成交量占比</div><b>${d.share}%</b><div style="font-size:12px;color:#b9c0cc">本區 ${d.n} 筆／全市 ${N(d.city_n)} 筆</div></div>`;
+  renderDist();
+  // 房型 / 樓層帶
+  document.getElementById('mixTitle').textContent=TYPE==='presale'?'房型分布':'建物型態分布';
+  document.getElementById('mix').innerHTML=d.type_mix.map(x=>bar(x.t,x.pct,x.n,'g')).join('');
+  document.getElementById('floor').innerHTML=d.floor_mix.filter(x=>x.t!=='其他'||x.pct>2).map(x=>bar(x.t,x.pct,x.n,'')).join('');
+  // 建案排行(預售)
+  document.getElementById('rankwrap').innerHTML=(TYPE==='presale'&&d.ranking.length)?
+    `<div class="sec"><span class="eng">Ranking</span><h2>預售建案成交排行</h2><span style="font-size:12px;color:var(--sub)">近12個月</span></div><div class="panel rank">`+
+    d.ranking.map((x,i)=>`<div class="ri"><span class="no">0${i+1}</span><div class="rn">${x.proj}<small>最近成交 ${x.last}</small></div><div class="rr"><b>${x.n} 筆</b><small>${A(x.unit_med)} 萬/坪</small></div></div>`).join('')+'</div>':'';
+  drawChart();
+  document.getElementById('foot').innerHTML=`口徑：單價為去車位單價；近12個月統計；分位數 P25/P50/P75 描述成交分布。${TYPE==='resale'?'中古為乾淨行情（已排除交屋回補、特殊交易、非住宅）。':''} 資料源：內政部實價登錄，更新 ${M.meta.updated_at}。比較僅描述同期成交樣本，不構成個別物件價值判定。`;
+}
+function bar(label,pct,n,cls){return `<div class="bar"><div class="lab"><b>${label}</b><span>${pct}%　${n} 件</span></div><div class="track"><div class="fill ${cls}" style="width:${Math.min(pct,100)}%"></div></div></div>`;}
+function renderDist(){
+  const d=M[TYPE].d12[D]; if(!d)return;
+  const data={unit:d.dist_unit,total:d.dist_total,ping:d.dist_ping}[DIST];
+  const unit={unit:'萬/坪',total:'萬',ping:'坪'}[DIST];
+  const top=data.reduce((a,b)=>b.n>a.n?b:a,data[0]);
+  document.getElementById('distbox').innerHTML=`<div style="font-size:12px;color:var(--sub);margin-bottom:12px">成交${{unit:'單價',total:'總價',ping:'坪數'}[DIST]}帶分布 · 單位：${unit}</div>`+
+    data.map(x=>bar(x.label,x.pct,x.n,x===top?'o':'')).join('')+
+    `<div style="font-size:13px;color:var(--sub);margin-top:8px">成交最集中於「${top.label}」，共 ${top.n} 筆（占 ${top.pct}%）。</div>`;
+}
+function drawChart(){
+  const series=M[TYPE].dist[D]||{}, inc=new Set(M.meta.incomplete_months);
+  const months=Object.keys(series).sort().slice(-12);
+  const vol=months.map(m=>series[m].n), price=months.map(m=>series[m].unit_med);
+  const colors=months.map(m=>inc.has(m)?'#d9cdb0':'#24395a');
+  if(chart)chart.destroy();
+  chart=new Chart(document.getElementById('chart'),{data:{labels:months.map(m=>m.slice(2)),datasets:[
+    {type:'bar',label:'成交量',data:vol,backgroundColor:colors,yAxisID:'y',order:2},
+    {type:'line',label:'單價中位',data:price,borderColor:'#c9a663',borderWidth:2.5,pointRadius:2,tension:.3,yAxisID:'y1',order:1,spanGaps:true}
+  ]},options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{font:{family:'Noto Sans TC'},boxWidth:12}}},
+    scales:{x:{ticks:{font:{size:10}}},y:{position:'left',grid:{display:false},title:{display:true,text:'件'}},y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'萬/坪'}}}}});
+}
+</script>
+</body>
+</html>

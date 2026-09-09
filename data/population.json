@@ -1,0 +1,87 @@
+{
+ "meta": {
+  "period": "2026-08",
+  "source": "桃園市政府民政局·各區現住戶口統計表(內政部戶政司戶籍人口統計)",
+  "updated": "2026-08底"
+ },
+ "districts": {
+  "桃園區": {
+   "pop": 478522,
+   "households": 211231,
+   "ppl_per_hh": 2.27,
+   "villages": 85
+  },
+  "中壢區": {
+   "pop": 439097,
+   "households": 192517,
+   "ppl_per_hh": 2.28,
+   "villages": 91
+  },
+  "大溪區": {
+   "pop": 93330,
+   "households": 37919,
+   "ppl_per_hh": 2.46,
+   "villages": 28
+  },
+  "楊梅區": {
+   "pop": 183215,
+   "households": 75543,
+   "ppl_per_hh": 2.43,
+   "villages": 41
+  },
+  "蘆竹區": {
+   "pop": 170734,
+   "households": 71173,
+   "ppl_per_hh": 2.4,
+   "villages": 39
+  },
+  "大園區": {
+   "pop": 91519,
+   "households": 39402,
+   "ppl_per_hh": 2.32,
+   "villages": 22
+  },
+  "龜山區": {
+   "pop": 189868,
+   "households": 88522,
+   "ppl_per_hh": 2.14,
+   "villages": 36
+  },
+  "八德區": {
+   "pop": 216712,
+   "households": 89759,
+   "ppl_per_hh": 2.41,
+   "villages": 52
+  },
+  "龍潭區": {
+   "pop": 126656,
+   "households": 51486,
+   "ppl_per_hh": 2.46,
+   "villages": 32
+  },
+  "平鎮區": {
+   "pop": 227051,
+   "households": 90963,
+   "ppl_per_hh": 2.5,
+   "villages": 46
+  },
+  "新屋區": {
+   "pop": 49758,
+   "households": 20330,
+   "ppl_per_hh": 2.45,
+   "villages": 23
+  },
+  "觀音區": {
+   "pop": 78242,
+   "households": 32583,
+   "ppl_per_hh": 2.4,
+   "villages": 24
+  },
+  "復興區": {
+   "pop": 13208,
+   "households": 4169,
+   "ppl_per_hh": 3.17,
+   "villages": 10
+  }
+ }
+}

@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="貝多房產平台：桃園成交行情、建案銷控與房市判讀資料。">
+  <meta name="theme-color" content="#122238">
+  <title>貝多房產平台｜把市場，看成一張有根據的地圖</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+TC:wght@300;400;500;600&family=Noto+Serif+TC:wght@500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #122238;
+      --ink-deep: #0b1728;
+      --navy: #24395a;
+      --gold: #c9a663;
+      --gold-light: #e7d29d;
+      --gold-deep: #9d7a38;
+      --paper: #f6f2e8;
+      --paper-alt: #eee7d9;
+      --paper-white: #fcfaf5;
+      --line: #d8cfbd;
+      --line-strong: #b8ab91;
+      --text: #26313c;
+      --muted: #707780;
+      --serif: "Noto Serif TC", serif;
+      --sans: "Noto Sans TC", sans-serif;
+      --display: "Cormorant Garamond", serif;
+      --edge: polygon(0 0, calc(100% - 1.25rem) 0, 100% 1.25rem, 100% 100%, 1.25rem 100%, 0 calc(100% - 1.25rem));
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(201, 166, 99, .09), transparent 18rem),
+        var(--paper);
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: .025em;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+      content: "";
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    img, svg { display: block; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    ::selection { color: var(--paper); background: var(--ink); }
+
+    .skip-link {
+      position: absolute;
+      z-index: 1000;
+      top: .75rem;
+      left: 1rem;
+      padding: .65rem 1rem;
+      color: var(--ink);
+      background: var(--gold-light);
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+    .wrap { width: min(100% - 4rem, 1230px); margin: 0 auto; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 0;
+      color: var(--gold-deep);
+      font-family: var(--display);
+      font-size: .95rem;
+      font-weight: 600;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 2.5rem; height: 1px; background: currentColor; content: ""; }
+    .section-heading { max-width: 41rem; }
+    .section-heading h2 {
+      margin: .85rem 0 1rem;
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 3.05rem);
+      font-weight: 600;
+      letter-spacing: .04em;
+      line-height: 1.42;
+    }
+    .section-heading p { max-width: 37rem; margin: 0; color: var(--muted); font-weight: 300; }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      z-index: 40;
+      top: 0;
+      background: rgba(246, 242, 232, .9);
+      border-bottom: 1px solid rgba(216, 207, 189, .85);
+      backdrop-filter: blur(13px) saturate(120%);
+    }
+    .nav-row { display: flex; align-items: center; justify-content: space-between; min-height: 4.75rem; gap: 1.5rem; }
+    .brand { display: inline-flex; align-items: center; flex: 0 0 auto; gap: .75rem; }
+    .brand .bmark { width: 2.55rem; height: 2.55rem; overflow: visible; flex: 0 0 auto; }
+    .brand .bpiece { transform-box: fill-box; transform-origin: center; }
+    .brand.assemble .bpiece { animation: logo-assemble .55s cubic-bezier(.22,.7,.2,1) both; }
+    .brand.assemble .bmain { --logo-ty: 80px; --logo-scale: .9; animation-delay: 0s; }
+    .brand.assemble .bs1 { --logo-tx: 120px; --logo-ty: -40px; animation-delay: .1s; }
+    .brand.assemble .bs2 { --logo-tx: 120px; --logo-ty: -24px; animation-delay: .16s; }
+    .brand.assemble .bs3 { --logo-tx: 120px; --logo-ty: -8px; animation-delay: .22s; }
+    .brand.assemble .bsq1 { --logo-tx: -70px; --logo-scale: 0; --logo-rotate: -90deg; animation-delay: .3s; }
+    .brand.assemble .bsq2 { --logo-ty: 80px; --logo-scale: 0; --logo-rotate: 90deg; animation-delay: .36s; }
+    .brand.assemble .bsq3 { --logo-ty: 80px; --logo-scale: 0; --logo-rotate: 90deg; animation-delay: .42s; }
+    @keyframes logo-assemble { from { opacity: 0; transform: translate(var(--logo-tx, 0), var(--logo-ty, 0)) scale(var(--logo-scale, 1)) rotate(var(--logo-rotate, 0deg)); } to { opacity: 1; transform: translate(0, 0) scale(1) rotate(0); } }
+    .brand-copy { display: grid; gap: .08rem; line-height: 1; }
+    .brand-copy strong { color: var(--ink); font-family: var(--serif); font-size: 1.12rem; font-weight: 600; letter-spacing: .08em; }
+    .brand-copy span { color: var(--muted); font-family: var(--display); font-size: .63rem; letter-spacing: .23em; }
+    .nav-list { display: flex; align-items: center; gap: .15rem; margin: 0; padding: 0; list-style: none; }
+    .nav-list a { position: relative; display: block; padding: .9rem .75rem; color: #34414f; font-size: .88rem; white-space: nowrap; }
+    .nav-list a::after { position: absolute; right: .75rem; bottom: .57rem; left: .75rem; height: 1px; background: var(--gold); content: ""; transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
+    .nav-list a:hover, .nav-list a[aria-current="page"] { color: var(--gold-deep); }
+    .nav-list a:hover::after, .nav-list a[aria-current="page"]::after { transform: scaleX(1); }
+    .menu-button { display: none; width: 2.8rem; height: 2.8rem; padding: 0; border: 1px solid var(--line); color: var(--ink); background: transparent; cursor: pointer; }
+    .menu-button span, .menu-button::before, .menu-button::after { display: block; width: 1.2rem; height: 1px; margin: auto; background: currentColor; content: ""; transition: transform .25s ease; }
+    .menu-button::before { transform: translateY(-.35rem); }
+    .menu-button::after { transform: translateY(.35rem); }
+    .menu-button[aria-expanded="true"] span { opacity: 0; }
+    .menu-button[aria-expanded="true"]::before { transform: translateY(.05rem) rotate(45deg); }
+    .menu-button[aria-expanded="true"]::after { transform: translateY(-.05rem) rotate(-45deg); }
+    .ticker { border-bottom: 1px solid var(--line); background: var(--paper-alt); }
+    .ticker-inner { display: flex; align-items: center; gap: clamp(1.25rem, 4vw, 4rem); min-height: 2.55rem; overflow: hidden; }
+    .signal { display: flex; align-items: center; flex: 0 0 auto; gap: .48rem; color: #56606c; font-size: .74rem; white-space: nowrap; }
+    .signal::before { width: .32rem; height: .32rem; border-radius: 50%; background: var(--gold-deep); content: ""; }
+    .signal b { color: var(--gold-deep); font-family: var(--display); font-size: .8rem; font-weight: 600; letter-spacing: .13em; }
+
+    /* Hero */
+    .hero { position: relative; isolation: isolate; overflow: hidden; border-bottom: 1px solid var(--line); }
+    .hero::before {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      background-image: linear-gradient(rgba(18, 34, 56, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(18, 34, 56, .07) 1px, transparent 1px);
+      background-position: center;
+      background-size: 5.5rem 5.5rem;
+      content: "";
+      mask-image: linear-gradient(90deg, #000 0 74%, transparent 100%);
+    }
+    .hero-symbol {
+      position: absolute;
+      z-index: -1;
+      top: 2rem;
+      left: min(59vw, calc(50% + 12rem));
+      width: 39rem;
+      height: 39rem;
+      color: rgba(201, 166, 99, .11);
+      transform: rotate(-13deg);
+    }
+    .hero-wrap { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(22rem, .8fr); min-height: 45.5rem; }
+    .hero-copy { display: flex; flex-direction: column; justify-content: center; padding: 6rem 6rem 6.25rem 0; }
+    .hero-title { max-width: 39rem; margin: 1.35rem 0 1.45rem; color: var(--ink); font-family: var(--serif); font-size: clamp(2.8rem, 5.25vw, 5.2rem); font-weight: 600; letter-spacing: .035em; line-height: 1.24; text-wrap: balance; }
+    .hero-title em { color: var(--gold-deep); font-style: normal; }
+    .hero-lead { max-width: 34rem; margin: 0; color: #46525f; font-size: 1.06rem; font-weight: 300; line-height: 2; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.3rem; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: .8rem; min-height: 3.15rem; padding: .6rem 1.35rem; font-size: .9rem; letter-spacing: .065em; transition: transform .2s ease, color .2s ease, background .2s ease; }
+    .button:hover { transform: translateY(-2px); }
+    .button:active { transform: translateY(0); }
+    .button.primary { color: var(--paper); background: var(--ink); clip-path: var(--edge); }
+    .button.primary:hover { background: var(--navy); }
+    .button.text { padding-right: .15rem; border-bottom: 1px solid var(--gold-deep); color: var(--ink); }
+    .button .arrow { color: var(--gold); font-family: var(--display); font-size: 1.45rem; line-height: 1; }
+    .hero-notes { display: flex; flex-wrap: wrap; gap: 1rem 1.65rem; margin-top: 4rem; color: #7c8082; font-family: var(--display); font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; }
+    .hero-notes span { display: flex; align-items: center; gap: .45rem; }
+    .hero-notes span::before { width: .32rem; height: .32rem; background: var(--gold); content: ""; transform: rotate(45deg); }
+
+    .market-index { position: relative; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; padding: 2.4rem 2.4rem 2.55rem; color: #f2ecde; background: var(--ink); clip-path: polygon(2.1rem 0, 100% 0, 100% calc(100% - 2.1rem), calc(100% - 2.1rem) 100%, 0 100%, 0 2.1rem); }
+    .market-index::after { position: absolute; right: -2rem; bottom: 2rem; width: 20rem; height: 12rem; border: 1px solid rgba(231, 210, 157, .2); content: ""; transform: skewY(-28deg); }
+    .index-rail { display: flex; align-items: center; justify-content: space-between; color: var(--gold-light); font-family: var(--display); font-size: .77rem; font-weight: 600; letter-spacing: .18em; }
+    .index-rail span:last-child { color: rgba(231, 210, 157, .5); writing-mode: vertical-rl; }
+    .index-label { margin: 3.1rem 0 .55rem; color: var(--gold-light); font-family: var(--display); font-size: .88rem; font-weight: 600; letter-spacing: .2em; }
+    .index-title { max-width: 17rem; margin: 0; color: #fffaf0; font-family: var(--serif); font-size: clamp(1.7rem, 2.5vw, 2.25rem); font-weight: 500; letter-spacing: .05em; line-height: 1.45; }
+    .index-date { margin: .9rem 0 2.4rem; color: #b7c1cd; font-size: .78rem; letter-spacing: .04em; }
+    .index-rule { height: 1px; background: linear-gradient(90deg, var(--gold), rgba(201, 166, 99, .1)); }
+    .index-metrics { display: grid; grid-template-columns: 1fr 1fr; margin: 1.3rem 0 2rem; border-bottom: 1px solid rgba(231, 210, 157, .23); }
+    .index-metrics div { min-height: 5.35rem; padding: .15rem 1rem 1.1rem 0; }
+    .index-metrics div + div { padding-right: 0; padding-left: 1rem; border-left: 1px solid rgba(231, 210, 157, .23); }
+    .index-metrics b { display: block; color: #fffaf0; font-family: var(--display); font-size: 2.55rem; font-weight: 500; letter-spacing: -.02em; line-height: 1; }
+    .index-metrics span { display: block; margin-top: .4rem; color: #bbc4cf; font-size: .72rem; }
+    .record { position: relative; z-index: 1; padding: 1.15rem 0 0; border-top: 1px solid rgba(231, 210, 157, .28); }
+    .record-header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .record-header span { color: var(--gold-light); font-family: var(--display); font-size: .72rem; font-weight: 600; letter-spacing: .16em; }
+    .record-header time { color: #b7c1cd; font-size: .67rem; white-space: nowrap; }
+    .record h2 { margin: .55rem 0 .3rem; color: #fffaf0; font-family: var(--serif); font-size: 1.42rem; font-weight: 500; }
+    .record p { margin: 0; color: #bdc6d1; font-size: .76rem; line-height: 1.7; }
+    .record-value { display: flex; align-items: baseline; gap: .4rem; margin-top: 1rem; }
+    .record-value strong { color: var(--gold-light); font-family: var(--display); font-size: 3.15rem; font-weight: 500; line-height: .9; }
+    .record-value span { color: #d3d9df; font-size: .78rem; }
+    .record-link { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.25rem; padding-bottom: .15rem; border-bottom: 1px solid rgba(231, 210, 157, .65); color: var(--gold-light); font-size: .79rem; }
+
+    /* Decision path */
+    .path { position: relative; padding: 0 0 6.5rem; }
+    .path-header { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding-top: 5.2rem; }
+    .path-header h2 { margin: 0; color: var(--ink); font-family: var(--serif); font-size: clamp(1.65rem, 3vw, 2.35rem); font-weight: 500; }
+    .path-header p { max-width: 25rem; margin: 0; color: var(--muted); font-size: .91rem; font-weight: 300; }
+    .path-list { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 2.2rem; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+    .path-item { position: relative; min-height: 13rem; padding: 1.4rem 1.7rem 1.55rem 0; transition: background .25s ease, padding .25s ease; }
+    .path-item + .path-item { padding-left: 1.7rem; border-left: 1px solid var(--line); }
+    .path-item:hover { padding-top: 1.1rem; background: rgba(201, 166, 99, .09); }
+    .path-no { color: var(--gold-deep); font-family: var(--display); font-size: 1.25rem; font-weight: 600; letter-spacing: .08em; }
+    .path-item h3 { margin: 2rem 0 .42rem; color: var(--ink); font-family: var(--serif); font-size: 1.33rem; font-weight: 500; }
+    .path-item p { margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.75; }
+    .path-item .go { position: absolute; right: .3rem; bottom: 1.35rem; color: var(--gold-deep); font-family: var(--display); font-size: 1.55rem; }
+
+    /* Atlas */
+    .atlas { position: relative; padding: 6.8rem 0 7.4rem; overflow: hidden; background: var(--paper-alt); }
+    .atlas::before { position: absolute; top: 0; left: 55%; width: 31rem; height: 31rem; border: 1px solid rgba(157, 122, 56, .17); content: ""; transform: rotate(39deg); }
+    .atlas-top { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+    .atlas-code { padding-bottom: .35rem; color: var(--muted); font-family: var(--display); font-size: .78rem; letter-spacing: .16em; }
+    .atlas-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .56fr); gap: clamp(2rem, 6vw, 6rem); margin-top: 3.65rem; }
+    .district-list { border-top: 1px solid var(--ink); }
+    .district { display: grid; grid-template-columns: 4.5rem minmax(6rem, .8fr) minmax(10rem, 1.25fr) auto; align-items: center; gap: 1.5rem; min-height: 6.95rem; border-bottom: 1px solid var(--line-strong); transition: background .25s ease, padding .25s ease; }
+    .district:hover { padding-right: .75rem; padding-left: .75rem; background: rgba(252, 250, 245, .55); }
+    .district-index { color: var(--gold-deep); font-family: var(--display); font-size: 1.3rem; font-weight: 600; }
+    .district h3 { margin: 0; color: var(--ink); font-family: var(--serif); font-size: 1.45rem; font-weight: 500; }
+    .district p { margin: 0; color: var(--muted); font-size: .83rem; }
+    .district .district-link { display: inline-flex; align-items: center; gap: .5rem; color: var(--ink); font-size: .81rem; white-space: nowrap; }
+    .district .district-link::after { color: var(--gold-deep); font-family: var(--display); font-size: 1.35rem; content: "→"; }
+    .atlas-side { position: relative; min-height: 30.5rem; padding: 2.35rem; overflow: hidden; color: var(--paper); background: var(--navy); clip-path: var(--edge); }
+    .atlas-side::before { position: absolute; inset: 1.5rem; border: 1px solid rgba(231, 210, 157, .36); content: ""; }
+    .atlas-side > * { position: relative; z-index: 1; }
+    .atlas-side .eyebrow { color: var(--gold-light); font-size: .83rem; }
+    .atlas-side h3 { max-width: 15rem; margin: 1.3rem 0; color: #fffaf0; font-family: var(--serif); font-size: 1.9rem; font-weight: 500; line-height: 1.5; }
+    .atlas-side p { max-width: 17rem; margin: 0; color: #c7d0da; font-size: .86rem; font-weight: 300; }
+    .atlas-map { position: absolute; right: -1.5rem; bottom: -1.9rem; width: 16rem; height: 15rem; opacity: .68; }
+    .atlas-marks { display: grid; gap: .65rem; margin-top: 2.15rem; }
+    .atlas-marks span { display: flex; align-items: center; gap: .65rem; color: var(--gold-light); font-family: var(--display); font-size: .76rem; letter-spacing: .13em; }
+    .atlas-marks span::before { width: .35rem; height: .35rem; border: 1px solid var(--gold-light); content: ""; transform: rotate(45deg); }
+
+    /* Case file */
+    .case-file { padding: 7.6rem 0; }
+    .case-top { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 3.5rem; }
+    .case-counter { color: var(--gold-deep); font-family: var(--display); font-size: .84rem; font-weight: 600; letter-spacing: .17em; }
+    .case-layout { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(22rem, .95fr); border-top: 1px solid var(--ink); }
+    .case-visual { position: relative; min-height: 35rem; overflow: hidden; background: var(--ink); }
+    .case-visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .case-caption { position: absolute; right: 1.5rem; bottom: 1.25rem; left: 1.5rem; display: flex; justify-content: space-between; gap: 1rem; padding-top: .8rem; border-top: 1px solid rgba(231, 210, 157, .48); color: var(--gold-light); font-family: var(--display); font-size: .7rem; letter-spacing: .14em; }
+    .case-copy { display: flex; flex-direction: column; justify-content: center; padding: clamp(2rem, 5vw, 5rem); background: var(--paper-white); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .case-copy h2 { margin: .9rem 0 .35rem; color: var(--ink); font-family: var(--serif); font-size: clamp(2rem, 3.3vw, 3rem); font-weight: 600; }
+    .case-location { margin: 0; color: var(--gold-deep); font-family: var(--display); font-size: 1rem; letter-spacing: .11em; }
+    .case-description { margin: 1.55rem 0 1.6rem; color: var(--muted); font-size: .92rem; font-weight: 300; }
+    .case-stat { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .case-stat div { padding: 1.2rem 1rem 1.2rem 0; }
+    .case-stat div + div { padding-right: 0; padding-left: 1.1rem; border-left: 1px solid var(--line); }
+    .case-stat strong { display: block; color: var(--ink); font-family: var(--display); font-size: 2.55rem; font-weight: 500; line-height: 1; }
+    .case-stat span { display: block; margin-top: .45rem; color: var(--muted); font-size: .74rem; }
+    .case-table { width: 100%; margin: 1.5rem 0 1.4rem; border-collapse: collapse; font-size: .82rem; }
+    .case-table th, .case-table td { padding: .65rem 0; border-bottom: 1px solid var(--line); text-align: left; }
+    .case-table th { color: var(--muted); font-weight: 400; }
+    .case-table td { color: var(--ink); font-weight: 500; text-align: right; }
+    .case-footnote { margin: 0; color: var(--muted); font-size: .71rem; line-height: 1.75; }
+
+    /* Report / tools */
+    .report { padding: 7rem 0; color: #f4eee2; background: var(--ink-deep); }
+    .report-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, .72fr); gap: clamp(3rem, 8vw, 8rem); align-items: end; }
+    .report .eyebrow { color: var(--gold-light); }
+    .report h2 { max-width: 35rem; margin: .95rem 0 1.35rem; color: #fffaf0; font-family: var(--serif); font-size: clamp(2.1rem, 4vw, 3.5rem); font-weight: 500; line-height: 1.43; }
+    .report h2 em { color: var(--gold-light); font-style: normal; }
+    .report p { max-width: 32rem; margin: 0; color: #b8c2ce; font-weight: 300; }
+    .report-link { display: inline-flex; align-items: center; gap: .7rem; margin-top: 2rem; padding-bottom: .25rem; border-bottom: 1px solid var(--gold); color: var(--gold-light); font-size: .9rem; }
+    .report-ledger { margin: 0; padding: 0; border-top: 1px solid rgba(231, 210, 157, .55); list-style: none; }
+    .report-ledger li { display: grid; grid-template-columns: 3.5rem 1fr auto; align-items: center; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid rgba(231, 210, 157, .25); }
+    .report-ledger .no { color: var(--gold); font-family: var(--display); font-size: 1.15rem; }
+    .report-ledger strong { color: #fffaf0; font-family: var(--serif); font-size: 1rem; font-weight: 500; }
+    .report-ledger time { color: #aeb9c6; font-family: var(--display); font-size: .78rem; letter-spacing: .1em; }
+    .tools { padding: 7rem 0 7.6rem; }
+    .tools-layout { display: grid; grid-template-columns: minmax(14rem, .55fr) minmax(0, 1.45fr); gap: clamp(2.5rem, 8vw, 8rem); align-items: start; }
+    .tool-list { border-top: 1px solid var(--ink); }
+    .tool { display: grid; grid-template-columns: 4rem minmax(8rem, .8fr) minmax(12rem, 1.35fr) auto; align-items: center; gap: 1.5rem; min-height: 7.7rem; border-bottom: 1px solid var(--line-strong); transition: background .25s ease, padding .25s ease; }
+    .tool:hover { padding-right: .8rem; padding-left: .8rem; background: rgba(201, 166, 99, .1); }
+    .tool-id { color: var(--gold-deep); font-family: var(--display); font-size: 1.25rem; font-weight: 600; }
+    .tool h3 { margin: 0; color: var(--ink); font-family: var(--serif); font-size: 1.35rem; font-weight: 500; }
+    .tool p { margin: 0; color: var(--muted); font-size: .83rem; }
+    .tool .open { color: var(--gold-deep); font-family: var(--display); font-size: 1.55rem; }
+    .about-band { margin-top: 7rem; padding: 2.2rem 0; border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); }
+    .about-band-inner { display: grid; grid-template-columns: 8rem 1fr auto; align-items: center; gap: 2rem; }
+    .about-band strong { color: var(--gold-deep); font-family: var(--display); font-size: 1.05rem; letter-spacing: .15em; }
+    .about-band p { max-width: 44rem; margin: 0; color: var(--muted); font-size: .87rem; font-weight: 300; }
+    .about-band a { padding-bottom: .1rem; border-bottom: 1px solid var(--gold-deep); color: var(--ink); font-size: .83rem; white-space: nowrap; }
+
+    /* Footer */
+    .footer { padding: 4rem 0 1.7rem; color: #d8ddd9; background: #101c2c; }
+    .footer-top { display: grid; grid-template-columns: 1.15fr .65fr .85fr; gap: 3rem; padding-bottom: 3rem; }
+    .footer .brand-copy strong { color: #f5efe2; }
+    .footer .brand-copy span { color: #aeb7bf; }
+    .footer .brand .bmark { width: 2.55rem; height: 2.55rem; }
+    .footer p { max-width: 25rem; margin: 1.35rem 0 0; color: #aeb7bf; font-size: .79rem; font-weight: 300; }
+    .footer h2 { margin: 0 0 .9rem; color: var(--gold-light); font-family: var(--display); font-size: .95rem; font-weight: 600; letter-spacing: .15em; }
+    .footer ul { display: grid; gap: .4rem; margin: 0; padding: 0; list-style: none; color: #b7c0ca; font-size: .8rem; }
+    .footer a:hover { color: var(--gold-light); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1.3rem; border-top: 1px solid rgba(231, 210, 157, .23); color: #98a4b0; font-family: var(--display); font-size: .72rem; letter-spacing: .1em; }
+
+    @media (max-width: 980px) {
+      .wrap { width: min(100% - 3rem, 1230px); }
+      .menu-button { display: grid; place-items: center; }
+      .nav-list { position: absolute; top: calc(100% + 1px); right: 0; left: 0; display: grid; gap: 0; padding: .7rem 1.5rem 1.25rem; border-bottom: 1px solid var(--line); background: var(--paper); box-shadow: 0 1.5rem 2rem rgba(18, 34, 56, .12); transform: translateY(-120%); visibility: hidden; transition: transform .25s ease, visibility .25s; }
+      .nav-list.is-open { transform: translateY(0); visibility: visible; }
+      .nav-list a { padding: .72rem 0; }
+      .nav-list a::after { right: auto; bottom: .5rem; left: 0; width: 3rem; }
+      .hero-wrap { grid-template-columns: 1fr; min-height: auto; }
+      .hero-copy { min-height: 38rem; padding-right: 0; }
+      .market-index { min-height: 31rem; margin: 0 -1.5rem; padding: 2.2rem 1.5rem; clip-path: none; }
+      .hero-symbol { left: auto; right: -13rem; }
+      .atlas-layout, .case-layout, .report-grid, .tools-layout { grid-template-columns: 1fr; }
+      .atlas-side { min-height: 23rem; }
+      .case-visual { min-height: 29rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-top > :first-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 680px) {
+      body { font-size: 15px; }
+      .wrap { width: min(100% - 2.5rem, 1230px); }
+      .ticker-inner { gap: 1.5rem; overflow-x: auto; scrollbar-width: none; }
+      .ticker-inner::-webkit-scrollbar { display: none; }
+      .hero-copy { min-height: 36rem; padding: 4.5rem 0 3.5rem; }
+      .hero-title { font-size: clamp(2.55rem, 12vw, 4.1rem); }
+      .hero-notes { margin-top: 2.6rem; }
+      .hero-notes span:last-child { display: none; }
+      .path { padding-bottom: 4.6rem; }
+      .path-header, .atlas-top, .case-top { display: block; padding-top: 0; }
+      .path-header h2 { margin-bottom: .75rem; }
+      .path-list { grid-template-columns: 1fr 1fr; }
+      .path-item { min-height: 10.5rem; padding: 1.2rem .9rem 1.1rem 0; }
+      .path-item + .path-item { padding-left: .9rem; }
+      .path-item:nth-child(3) { border-top: 1px solid var(--line); }
+      .path-item h3 { margin-top: 1.2rem; font-size: 1.1rem; }
+      .path-item p { font-size: .75rem; line-height: 1.6; }
+      .path-item .go { bottom: .8rem; }
+      .atlas, .case-file, .report, .tools { padding: 4.8rem 0; }
+      .atlas-code, .case-counter { display: block; margin-top: 1rem; }
+      .atlas-layout { margin-top: 2.5rem; }
+      .district { grid-template-columns: 2.7rem 1fr auto; gap: .7rem; min-height: 6.1rem; }
+      .district p { display: none; }
+      .district h3 { font-size: 1.2rem; }
+      .district .district-link { font-size: .72rem; }
+      .atlas-side { padding: 2rem; }
+      .case-layout { margin-right: -1.25rem; margin-left: -1.25rem; }
+      .case-visual { min-height: 24rem; }
+      .case-copy { padding: 2.2rem 1.25rem; }
+      .report-grid { gap: 2.5rem; }
+      .report-ledger li { grid-template-columns: 2.4rem 1fr; }
+      .report-ledger time { display: none; }
+      .tool { grid-template-columns: 2.8rem 1fr auto; gap: .75rem; min-height: 6rem; }
+      .tool p { display: none; }
+      .tool h3 { font-size: 1.14rem; }
+      .about-band { margin-top: 4.5rem; }
+      .about-band-inner { grid-template-columns: 1fr; gap: .75rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2.3rem; }
+      .footer-top > :first-child { grid-column: auto; }
+      .footer-bottom { display: grid; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳至主要內容</a>
+
+  <header class="site-header">
+    <div class="wrap nav-row">
+      <a class="brand" href="#top" aria-label="貝多房產平台首頁">
+        <svg class="bmark" viewBox="230 365 620 620" aria-hidden="true">
+          <path class="bpiece bmain" fill="#545454" d="M834.96,786.76 664.06,616.67 577.96,616.29 577.96,380.1 504.72,379.79 406.11,380.2 245.52,380.2 245.52,459.26 504.78,459.26 504.9,615.76 245.52,616.53 245.52,969.23 332.74,969.23 332.74,684.65 541.15,684.52 621.19,684.85 750.58,817.01 750.28,905.73 422.81,905.73 422.81,969.23 834.96,969.23 Z"/>
+          <path class="bpiece bs1" fill="#80776D" d="M663.42,532.82 577.14,532.82 577.14,579.49 663.42,579.49 835.33,745.78 835.33,702.69 Z"/>
+          <path class="bpiece bs2" fill="#80776D" d="M663.42,456.18 577.14,456.18 577.14,502.86 663.42,502.86 835.33,669.15 835.33,626.06 Z"/>
+          <path class="bpiece bs3" fill="#80776D" d="M835.33,592.86 835.33,549.78 663.42,379.9 577.14,379.9 577.14,426.57 663.42,426.57 Z"/>
+          <rect class="bpiece bsq1" fill="#545454" x="244.27" y="505.53" width="64.65" height="64.65"/>
+          <rect class="bpiece bsq2" fill="#545454" x="421.2" y="765.52" width="64.65" height="64.65"/>
+          <rect class="bpiece bsq3" fill="#545454" x="555.29" y="765.52" width="64.65" height="64.65"/>
+        </svg>
+        <span class="brand-copy"><strong>貝多不動產</strong><span>BEEDOO REALTY</span></span>
+      </a>
+      <button class="menu-button" type="button" aria-label="開啟導覽選單" aria-controls="primary-nav" aria-expanded="false"><span></span></button>
+      <nav aria-label="主要導覽">
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="#cases">建案銷控</a></li>
+          <li><a href="market.html" aria-current="page">成交行情</a></li>
+          <li><a href="#report">房市觀測</a></li>
+          <li><a href="#brief">房市快訊</a></li>
+          <li><a href="#tools">房產工具</a></li>
+          <li><a href="#about">關於貝多</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="ticker" aria-label="資料快訊">
+      <div class="wrap ticker-inner">
+        <span class="signal"><b>LIVE</b>貝多代銷案銷控持續維護</span>
+        <span class="signal"><b>DATA</b>桃園實價登錄資料更新至 2026 年 6 月</span>
+        <span class="signal"><b>NEWS</b>從一筆成交開始，讀懂一個街區</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <svg class="hero-symbol" viewBox="230 365 620 620" aria-hidden="true">
+        <path fill="currentColor" d="M834.96,786.76 664.06,616.67 577.96,616.29 577.96,380.1 504.72,379.79 406.11,380.2 245.52,380.2 245.52,459.26 504.78,459.26 504.9,615.76 245.52,616.53 245.52,969.23 332.74,969.23 332.74,684.65 541.15,684.52 621.19,684.85 750.58,817.01 750.28,905.73 422.81,905.73 422.81,969.23 834.96,969.23 Z"/>
+        <path fill="currentColor" d="M663.42,532.82 577.14,532.82 577.14,579.49 663.42,579.49 835.33,745.78 835.33,702.69 Z"/>
+        <path fill="currentColor" d="M663.42,456.18 577.14,456.18 577.14,502.86 663.42,502.86 835.33,669.15 835.33,626.06 Z"/>
+        <path fill="currentColor" d="M835.33,592.86 835.33,549.78 663.42,379.9 577.14,379.9 577.14,426.57 663.42,426.57 Z"/>
+        <rect fill="currentColor" x="244.27" y="505.53" width="64.65" height="64.65"/>
+        <rect fill="currentColor" x="421.2" y="765.52" width="64.65" height="64.65"/>
+        <rect fill="currentColor" x="555.29" y="765.52" width="64.65" height="64.65"/>
+      </svg>
+      <div class="wrap hero-wrap">
+        <div class="hero-copy">
+          <p class="eyebrow">Taoyuan market almanac · vol. 01</p>
+          <h1 class="hero-title" id="hero-title">把市場，<br>看成一張<em>有根據的地圖</em>。</h1>
+          <p class="hero-lead">成交不是一個數字而已。貝多把桃園的建案、實價與市場觀測整理成可追溯的判讀脈絡，讓每一次比較，都更接近你的決定。</p>
+          <div class="hero-actions">
+            <a class="button primary" href="market.html">從桃園成交行情開始 <span class="arrow">→</span></a>
+            <a class="button text" href="#cases">查看建案個案檔案 <span class="arrow">→</span></a>
+          </div>
+          <div class="hero-notes" aria-label="資料範圍">
+            <span>North Taiwan / first edition</span>
+            <span>Taoyuan focus</span>
+            <span>Official transaction record</span>
+          </div>
+        </div>
+
+        <aside class="market-index" aria-labelledby="index-title">
+          <div>
+            <div class="index-rail"><span>MARKET INDEX / 2026.06</span><span>BEEDOO NO. 01</span></div>
+            <p class="index-label">本期市場索引</p>
+            <h2 class="index-title" id="index-title">先看資料怎麼來，<br>再判斷價格在哪裡。</h2>
+            <p class="index-date">資料源：內政部實價登錄・批次與即時查詢</p>
+            <div class="index-rule"></div>
+            <div class="index-metrics" aria-label="資料範圍摘要">
+              <div><b>03</b><span>判讀入口<br>行情・個案・觀測</span></div>
+              <div><b>01</b><span>首發市場<br>桃園市</span></div>
+            </div>
+          </div>
+          <article class="record" aria-label="本期成交記錄">
+            <div class="record-header"><span>CASE FILE / 04</span><time datetime="2026-06">更新至 2026.06</time></div>
+            <h2>遠雄仰森</h2>
+            <p>大園區青埔 A19・交屋 111 筆／換約 42 筆</p>
+            <div class="record-value"><strong>51.6</strong><span>萬／坪<br>交屋均價</span></div>
+            <a class="record-link" href="#cases">讀取此案完整紀錄 <span aria-hidden="true">→</span></a>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="path" aria-labelledby="path-title">
+      <div class="wrap">
+        <div class="path-header">
+          <h2 id="path-title">從市場到一間房，<br>把每一步放回脈絡裡。</h2>
+          <p>首頁不是資訊的終點，而是一條由廣到細的判讀路徑。先找到位置，再確認事實，最後回到自己的條件。</p>
+        </div>
+        <div class="path-list">
+          <a class="path-item" href="market.html"><span class="path-no">01</span><h3>看全市</h3><p>從桃園各區開始，找到正在改變的市場位置。</p><span class="go" aria-hidden="true">→</span></a>
+          <a class="path-item" href="market.html"><span class="path-no">02</span><h3>查區域</h3><p>以行政區與生活圈切入，比較你關心的地段。</p><span class="go" aria-hidden="true">→</span></a>
+          <a class="path-item" href="#cases"><span class="path-no">03</span><h3>讀個案</h3><p>把交屋、轉售與換約分開，留下可被檢視的紀錄。</p><span class="go" aria-hidden="true">→</span></a>
+          <a class="path-item" href="#tools"><span class="path-no">04</span><h3>做試算</h3><p>用房貸與坪數工具，換算成你的購屋節奏。</p><span class="go" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="atlas" id="atlas" aria-labelledby="atlas-title">
+      <div class="wrap">
+        <div class="atlas-top">
+          <div class="section-heading">
+            <p class="eyebrow">District index / Taoyuan</p>
+            <h2 id="atlas-title">桃園，不該只剩下一個平均價。</h2>
+            <p>用行政區作為入口，但不把城市切成互不相干的數字。每一頁都保留區域、建案與逐筆成交之間的連結。</p>
+          </div>
+          <span class="atlas-code">T.Y. / MARKET READING<br>FIRST RELEASE</span>
+        </div>
+        <div class="atlas-layout">
+          <div class="district-list" aria-label="桃園行政區成交行情入口">
+            <a class="district" href="#cases"><span class="district-index">01</span><h3>桃園區</h3><p>成熟生活圈與重劃區並置，從逐筆成交讀取街廓差異。</p><span class="district-link">進入行情</span></a>
+            <a class="district" href="#cases"><span class="district-index">02</span><h3>中壢區</h3><p>交通節點、舊城與新開發，留下不同週期的市場記錄。</p><span class="district-link">進入行情</span></a>
+            <a class="district" href="#cases"><span class="district-index">03</span><h3>龜山區</h3><p>產業聚落與新興居住地帶，持續追蹤實價交易訊號。</p><span class="district-link">進入行情</span></a>
+            <a class="district" href="#cases"><span class="district-index">04</span><h3>青埔生活圈</h3><p>把高鐵特區與相鄰行政區放回同一張生活地圖中判讀。</p><span class="district-link">進入行情</span></a>
+            <a class="district" href="#cases"><span class="district-index">05</span><h3>大園區</h3><p>從建案銷控到實際交屋，追蹤成屋與預售的節奏差異。</p><span class="district-link">進入行情</span></a>
+          </div>
+          <aside class="atlas-side" aria-label="資料判讀說明">
+            <p class="eyebrow">Reading note</p>
+            <h3>價格是一條線，<br>不是一個答案。</h3>
+            <p>貝多會在完整平台中把實登資料、案場進度與市場觀測分層呈現，避免單一均價掩蓋交易條件。</p>
+            <div class="atlas-marks"><span>成交類型分開辨識</span><span>資料來源可追溯</span><span>區域和個案交叉閱讀</span></div>
+            <svg class="atlas-map" viewBox="0 0 220 205" aria-hidden="true">
+              <path d="M35 15 133 9l52 42-10 92-71 47-78-35-9-70z" fill="none" stroke="#e7d29d" stroke-width="1"/>
+              <path d="m47 34 72 17 47 50-65 54-58-29zM119 51l-18 104m65-54-119 25M35 15l12 111m86-117 33 92" fill="none" stroke="#e7d29d" stroke-width=".65" opacity=".85"/>
+              <circle cx="119" cy="51" r="4" fill="#e7d29d"/><circle cx="101" cy="155" r="3" fill="#e7d29d"/><circle cx="47" cy="126" r="3" fill="#e7d29d"/>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-file" id="cases" aria-labelledby="case-title">
+      <div class="wrap">
+        <div class="case-top">
+          <div class="section-heading">
+            <p class="eyebrow">Selected case file</p>
+            <h2 id="case-title">把一案的成交，攤開來看。</h2>
+          </div>
+          <span class="case-counter">FILE 04 / QINGPU A19<br>DATA DETAIL</span>
+        </div>
+        <article class="case-layout">
+          <div class="case-visual" aria-label="青埔 A19 建築量體示意">
+            <svg viewBox="0 0 700 620" role="img" aria-label="深墨藍背景上的現代住宅建築線稿">
+              <rect width="700" height="620" fill="#122238"/>
+              <path d="M0 470h700M0 510h700M0 552h700" stroke="#c9a663" stroke-width="1" opacity=".37"/>
+              <path d="M80 470V234l118-82 57 39v279M228 470V113l136-84 80 54v387M465 470V204l94-55 75 56v265" fill="#203858" stroke="#e7d29d" stroke-width="1.5"/>
+              <path d="M106 255h67m-67 35h67m-67 35h67m-67 35h67m-67 35h67m-67 35h67M260 139h157m-157 37h157m-157 37h157m-157 37h157m-157 37h157m-157 37h157m-157 37h157m-157 37h157m-157 37h157M490 229h117m-117 36h117m-117 36h117m-117 36h117m-117 36h117m-117 36h117" stroke="#c9a663" stroke-width="1" opacity=".8"/>
+              <path d="M0 469 153 389l136 80 91-169 110 169 119-155 91 155" fill="none" stroke="#e7d29d" stroke-width="1" opacity=".52"/>
+              <circle cx="364" cy="29" r="7" fill="#e7d29d"/><path d="M364 36v75M345 69h38" stroke="#e7d29d" stroke-width="1" opacity=".7"/>
+              <text x="50" y="84" fill="#e7d29d" font-family="serif" font-size="16" letter-spacing="5">A19 / BUILT RECORD</text>
+              <text x="50" y="110" fill="#b9c6d3" font-family="serif" font-size="11" letter-spacing="3">QINGPU · DAYUAN · TAOYUAN</text>
+            </svg>
+            <div class="case-caption"><span>BEEDOO PROPERTY FILE / 2026.06</span><span>建築量體示意</span></div>
+          </div>
+          <div class="case-copy">
+            <p class="eyebrow">Transaction record</p>
+            <h2>遠雄仰森</h2>
+            <p class="case-location">大園區・青埔 A19</p>
+            <p class="case-description">用同一個案子檢視不同交易類型：已交屋、換約與逐筆條件各自存在。資料不替你下結論，但讓你看得到結論該從哪裡來。</p>
+            <div class="case-stat" aria-label="遠雄仰森成交摘要">
+              <div><strong>51.6</strong><span>萬／坪・交屋均價</span></div>
+              <div><strong>153</strong><span>筆・已收錄成交</span></div>
+            </div>
+            <table class="case-table">
+              <caption class="visually-hidden">遠雄仰森最近成交紀錄</caption>
+              <tbody>
+                <tr><th scope="row">13 樓之 1・4 房 2 廳 2 衛・50.8 坪</th><td>2,400 萬</td></tr>
+                <tr><th scope="row">交易類型</th><td>交屋 111・換約 42</td></tr>
+              </tbody>
+            </table>
+            <p class="case-footnote">資料源：內政部不動產成交案件實際資訊申報登錄・批次資料與即時查詢。資料更新至 2026 年 6 月。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="report" id="report" aria-labelledby="report-title">
+      <div class="wrap report-grid">
+        <div>
+          <p class="eyebrow">Market observation / monthly note</p>
+          <h2 id="report-title">一份月報，不只回答<br>「<em>漲了還是跌了</em>」。</h2>
+          <p>用市場觀測補上成交清單沒有說的事：供給在哪裡集中、交易落在哪個條件、下個月應該繼續注意什麼。</p>
+          <a class="report-link" href="#brief">閱讀本月房市觀測 <span aria-hidden="true">→</span></a>
+        </div>
+        <ol class="report-ledger" id="brief">
+          <li><span class="no">01</span><strong>青埔生活圈的個案成交</strong><time datetime="2026-06">2026.06</time></li>
+          <li><span class="no">02</span><strong>預售與交屋資料如何分讀</strong><time datetime="2026-06">2026.06</time></li>
+          <li><span class="no">03</span><strong>把行政區拉回生活圈比較</strong><time datetime="2026-06">2026.06</time></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="tools" id="tools" aria-labelledby="tools-title">
+      <div class="wrap tools-layout">
+        <div class="section-heading">
+          <p class="eyebrow">Useful calculation</p>
+          <h2 id="tools-title">先算清楚，<br>再談選擇。</h2>
+          <p>把買房時最常反覆確認的數字，留在同一個工作台。工具不替你決定，但幫你避免在比較時遺漏條件。</p>
+        </div>
+        <div class="tool-list" aria-label="房產工具入口">
+          <a class="tool" href="#top"><span class="tool-id">01</span><h3>房貸月付試算</h3><p>以貸款額度、利率與年期推估每月支出。</p><span class="open" aria-hidden="true">→</span></a>
+          <a class="tool" href="#top"><span class="tool-id">02</span><h3>坪數換算</h3><p>在坪、平方公尺與室內使用尺度之間快速比對。</p><span class="open" aria-hidden="true">→</span></a>
+          <a class="tool" href="#top"><span class="tool-id">03</span><h3>交易費用清單</h3><p>把稅費、規費與購屋流程所需支出逐一放入判斷。</p><span class="open" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="wrap about-band" id="about">
+        <div class="about-band-inner"><strong>ABOUT BEEDOO</strong><p>貝多以不動產代銷與顧問實務為根基，將市場判讀、建案資訊與購屋工具整理成更能被使用的房產平台。</p><a href="#top">認識貝多 <span aria-hidden="true">→</span></a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div>
+          <a class="brand" href="#top" aria-label="返回頁面頂端">
+            <svg class="bmark" viewBox="230 365 620 620" aria-hidden="true">
+              <path fill="#EEECE7" d="M834.96,786.76 664.06,616.67 577.96,616.29 577.96,380.1 504.72,379.79 406.11,380.2 245.52,380.2 245.52,459.26 504.78,459.26 504.9,615.76 245.52,616.53 245.52,969.23 332.74,969.23 332.74,684.65 541.15,684.52 621.19,684.85 750.58,817.01 750.28,905.73 422.81,905.73 422.81,969.23 834.96,969.23 Z"/>
+              <path fill="#C7C1B6" d="M663.42,532.82 577.14,532.82 577.14,579.49 663.42,579.49 835.33,745.78 835.33,702.69 Z"/>
+              <path fill="#C7C1B6" d="M663.42,456.18 577.14,456.18 577.14,502.86 663.42,502.86 835.33,669.15 835.33,626.06 Z"/>
+              <path fill="#C7C1B6" d="M835.33,592.86 835.33,549.78 663.42,379.9 577.14,379.9 577.14,426.57 663.42,426.57 Z"/>
+              <rect fill="#EEECE7" x="244.27" y="505.53" width="64.65" height="64.65"/>
+              <rect fill="#EEECE7" x="421.2" y="765.52" width="64.65" height="64.65"/>
+              <rect fill="#EEECE7" x="555.29" y="765.52" width="64.65" height="64.65"/>
+            </svg>
+            <span class="brand-copy"><strong>貝多不動產</strong><span>BEEDOO REALTY</span></span>
+          </a>
+          <p>北北桃房市情報平台。從成交紀錄、案場資訊到購屋工具，讓資料回到它該被理解的位置。</p>
+        </div>
+        <div><h2>平台入口</h2><ul><li><a href="market.html">桃園成交行情</a></li><li><a href="#cases">精選建案檔案</a></li><li><a href="#report">房市觀測</a></li><li><a href="#tools">房產工具</a></li></ul></div>
+        <div><h2>資料說明</h2><ul><li>資料源：內政部實價登錄</li><li>更新至：2026 年 6 月</li><li><a href="#about">關於貝多</a></li><li><a href="#top">資料使用原則</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 BEEDOO PROPERTY INTELLIGENCE</span><span>TAOYUAN MARKET ALMANAC · VOL. 01</span></div>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.querySelector('.menu-button');
+    const navList = document.querySelector('.nav-list');
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      menuButton.setAttribute('aria-label', open ? '開啟導覽選單' : '關閉導覽選單');
+      navList.classList.toggle('is-open', !open);
+    });
+    navList.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.setAttribute('aria-label', '開啟導覽選單');
+      navList.classList.remove('is-open');
+    }));
+
+    const headerBrand = document.querySelector('.site-header .brand');
+    const playBrandAssembly = () => {
+      headerBrand.classList.remove('assemble');
+      void headerBrand.offsetWidth;
+      headerBrand.classList.add('assemble');
+    };
+    window.setTimeout(playBrandAssembly, 180);
+    headerBrand.addEventListener('mouseenter', playBrandAssembly);
+  </script>
+</body>
+</html>
