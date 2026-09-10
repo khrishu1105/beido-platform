@@ -1,0 +1,518 @@
+{
+ "total": 64,
+ "mapped": 12,
+ "items": [
+  {
+   "source_name": "鉑?",
+   "district": "龜山區",
+   "affected": 1105,
+   "mapped": true,
+   "canonical": "興富發鉑悦",
+   "status": "mapped"
+  },
+  {
+   "source_name": "站前新?",
+   "district": "中壢區",
+   "affected": 903,
+   "mapped": true,
+   "canonical": "站前新鋭",
+   "status": "mapped"
+  },
+  {
+   "source_name": "大清城?",
+   "district": "中壢區",
+   "affected": 308,
+   "mapped": true,
+   "canonical": "大清城双",
+   "status": "mapped"
+  },
+  {
+   "source_name": "宏普?時代-時晴苑",
+   "district": "中壢區",
+   "affected": 293,
+   "mapped": true,
+   "canonical": "宏普画時代-時晴苑",
+   "status": "mapped"
+  },
+  {
+   "source_name": "宏普?時代-時代苑",
+   "district": "中壢區",
+   "affected": 252,
+   "mapped": true,
+   "canonical": "宏普画時代-時代苑",
+   "status": "mapped"
+  },
+  {
+   "source_name": "昭揚天?",
+   "district": "桃園區",
+   "affected": 234,
+   "mapped": false,
+   "canonical": null,
+   "status": "low_confidence"
+  },
+  {
+   "source_name": "富堡菁英?",
+   "district": "龜山區",
+   "affected": 234,
+   "mapped": true,
+   "canonical": "富堡菁英滙",
+   "status": "mapped"
+  },
+  {
+   "source_name": "鴻廣?青",
+   "district": "龜山區",
+   "affected": 232,
+   "mapped": true,
+   "canonical": "鴻廣絵青",
+   "status": "mapped"
+  },
+  {
+   "source_name": "宏普?時代-時尚苑",
+   "district": "中壢區",
+   "affected": 214,
+   "mapped": true,
+   "canonical": "宏普画時代-時尚苑",
+   "status": "mapped"
+  },
+  {
+   "source_name": "益騏新?峰",
+   "district": "桃園區",
+   "affected": 206,
+   "mapped": true,
+   "canonical": "益騏新画峰",
+   "status": "mapped"
+  },
+  {
+   "source_name": "大築文?",
+   "district": "蘆竹區",
+   "affected": 204,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?讀伊頓",
+   "district": "桃園區",
+   "affected": 159,
+   "mapped": true,
+   "canonical": "悅讀伊頓",
+   "status": "mapped"
+  },
+  {
+   "source_name": "HLV.?",
+   "district": "中壢區",
+   "affected": 152,
+   "mapped": true,
+   "canonical": "HLV‧栢",
+   "status": "mapped"
+  },
+  {
+   "source_name": "昆旺青茵?",
+   "district": "中壢區",
+   "affected": 132,
+   "mapped": true,
+   "canonical": "昆旺青茵悦",
+   "status": "mapped"
+  },
+  {
+   "source_name": "大觀雲?",
+   "district": "桃園區",
+   "affected": 131,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "富堡大湖?",
+   "district": "龜山區",
+   "affected": 116,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?峰華",
+   "district": "桃園區",
+   "affected": 114,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "鉅慶森?家",
+   "district": "龜山區",
+   "affected": 105,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "中?時代廣場/中??GARDEN",
+   "district": "桃園區",
+   "affected": 90,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "桃?紅",
+   "district": "大園區",
+   "affected": 87,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "逸偉?淳青",
+   "district": "中壢區",
+   "affected": 81,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "百川峰?B",
+   "district": "桃園區",
+   "affected": 81,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "高誠君?",
+   "district": "大園區",
+   "affected": 78,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "天?",
+   "district": "桃園區",
+   "affected": 75,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "帝?德莊 德尊區",
+   "district": "觀音區",
+   "affected": 74,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "合展?禾",
+   "district": "桃園區",
+   "affected": 73,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "宜誠?左岸",
+   "district": "中壢區",
+   "affected": 72,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "百川峰?A",
+   "district": "桃園區",
+   "affected": 66,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "宜雄玉?",
+   "district": "大園區",
+   "affected": 64,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "澄?",
+   "district": "大園區",
+   "affected": 44,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?盈又一村",
+   "district": "中壢區",
+   "affected": 44,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "百俊吾?",
+   "district": "桃園區",
+   "affected": 40,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?湖薈",
+   "district": "八德區",
+   "affected": 39,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?恬",
+   "district": "大園區",
+   "affected": 39,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "HLA.?",
+   "district": "中壢區",
+   "affected": 36,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "鼎藏青?",
+   "district": "中壢區",
+   "affected": 35,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?盈千江墨",
+   "district": "平鎮區",
+   "affected": 32,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "北海豐?",
+   "district": "平鎮區",
+   "affected": 30,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "鵬躍?",
+   "district": "蘆竹區",
+   "affected": 30,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "福興 豐?",
+   "district": "大園區",
+   "affected": 27,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?盈花靜院",
+   "district": "中壢區",
+   "affected": 24,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "京澄卓?",
+   "district": "桃園區",
+   "affected": 19,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "永華?",
+   "district": "觀音區",
+   "affected": 18,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "弘達時?",
+   "district": "大溪區",
+   "affected": 17,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "禾?",
+   "district": "楊梅區",
+   "affected": 15,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "冠昱金?II",
+   "district": "大園區",
+   "affected": 14,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "冠昱金?III",
+   "district": "新屋區",
+   "affected": 14,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?新擎",
+   "district": "平鎮區",
+   "affected": 11,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?花園",
+   "district": "桃園區",
+   "affected": 9,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?盈東籬下",
+   "district": "中壢區",
+   "affected": 8,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "威均京?",
+   "district": "中壢區",
+   "affected": 5,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "中?ITC國際商貿中心",
+   "district": "中壢區",
+   "affected": 4,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "耑?",
+   "district": "桃園區",
+   "affected": 3,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "櫻悅?",
+   "district": "楊梅區",
+   "affected": 2,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "中豐?",
+   "district": "平鎮區",
+   "affected": 2,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?東騰",
+   "district": "桃園區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "帝?德裝 德尊區",
+   "district": "觀音區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?室代",
+   "district": "觀音區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "?泰然",
+   "district": "龍潭區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "旭日?",
+   "district": "觀音區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "山榆柏?",
+   "district": "大園區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "益欣?陽",
+   "district": "中壢區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "丰嶺?林",
+   "district": "龜山區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  },
+  {
+   "source_name": "立?語墅",
+   "district": "楊梅區",
+   "affected": 1,
+   "mapped": false,
+   "canonical": null,
+   "status": "unresolved"
+  }
+ ]
+}

@@ -575,6 +575,7 @@
 
     let DATA = null, PROJECTS = null;
     const PROJECT_CACHE = {};
+    let REDIRECT = {};
     const SNAP = {};
     const state = { market: 'presale', month: '', district: '', project: null, range: 24, rankBy: 'price', cityTab: 'rank' };
 
@@ -883,7 +884,7 @@
       }).join('');
       const growth = s.growth!=null?`<span style="color:${s.growth>0?'#c0392b':'#3f7d68'}">${s.growth>0?'+':''}${s.growth}%</span>`:'—';
       $('#projectView').innerHTML = `<button class="district-back" type="button" id="backToDistrict">← 返回${state.district||'全市'}</button>
-        <div class="district-title-row"><div><p class="section-kicker">Project Dossier / ${det.district}</p><h1>${esc(det.name)}</h1></div><p>${det.district}・完整實價登錄生命週期：預售簽約 → 交屋過戶 → 換約 → 中古轉售。含貝多即時查詢網補件，交屋回補與真中古轉售分開標示。</p></div>
+        <div class="district-title-row"><div><p class="section-kicker">Project Dossier / ${det.district}</p><h1>${esc(det.name)}</h1>${(det.source_names&&det.source_names.length)?`<p style="font-size:12px;color:#8a836f;margin-top:4px">實登原始登錄名：${det.source_names.map(esc).join('、')}（已依建商正式字形校正）</p>`:''}</div><p>${det.district}・完整實價登錄生命週期：預售簽約 → 交屋過戶 → 換約 → 中古轉售。含貝多即時查詢網補件，交屋回補與真中古轉售分開標示。</p></div>
         <section class="section"><div class="kpi-grid">
           ${kpi('預售簽約', n(s.presale_n), '筆', s.presale_med?`均 ${one(s.presale_med)} 萬／坪`:'')}
           ${kpi('交屋過戶', n(s.hand_n), '筆', '同批戶完工登記')}
@@ -931,7 +932,7 @@
         element.addEventListener('blur', () => syncDistrictHover(element.dataset.district, false));
       });
       $('#backToCity')?.addEventListener('click', () => navigate({district:''}));
-      $$('.linked-project').forEach(el => el.addEventListener('click', () => navigate({project: Number(el.dataset.pid)})));
+      $$('.linked-project').forEach(el => el.addEventListener('click', () => navigate({project: el.dataset.pid})));
       $('#districtSelect')?.addEventListener('change', event => navigate({district: event.target.value}));
       $('#shareDistrict')?.addEventListener('click', sharePage);
       $$('[data-citytab]').forEach(button => button.addEventListener('click', () => { navigate({cityTab: button.dataset.citytab}, true); const nav = $('.city-nav-section'); if (nav) window.scrollTo({top: nav.offsetTop - 80, behavior:'smooth'}); }));
@@ -1046,7 +1047,7 @@
       state.month = marketMeta().available_months.includes(selectedMonth) ? selectedMonth : marketMeta().complete_month;
       state.district = DATA.meta.districts.includes(district) ? district : '';
       const project = params.get('project');
-      state.project = project ? Number(project) : null;
+      state.project = project ? (REDIRECT[project] || project) : null;   // 舊流水PID → 新穩定ID 轉址
       const tab = params.get('tab');
       state.cityTab = ['rank','grid','map','tx'].includes(tab) ? tab : 'rank';
       const range = Number(params.get('range'));
@@ -1060,6 +1061,7 @@
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         DATA = await response.json();
         try { PROJECTS = await (await fetch('./data/projects/index.json', {cache:'no-store'})).json(); } catch (_) { PROJECTS = null; }
+        try { REDIRECT = await (await fetch('./data/projects/redirect.json', {cache:'no-store'})).json(); } catch (_) { REDIRECT = {}; }
         readUrlState(); setupControls(); updateUrl(true); await ensureSnapshot(); render();
         $('#loading').hidden = true; $('#app').hidden = false;
       } catch (error) {

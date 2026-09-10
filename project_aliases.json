@@ -1,0 +1,24 @@
+{
+  "_meta": {
+    "purpose": "建案名稱校正 registry：亂碼(?)還原為建商正式行銷字形。以 區+地址 為識別鍵防止同名誤合併。校正發生在 ETL 歸戶之前，保留 source_name。",
+    "verified_at": "2026-09-10",
+    "rule": "只自動套用 confidence=high/medium；low 僅列入 name_quality_report 不改名。搜尋時悦/悅、鋭/銳、画/畫、双/雙、滙/匯、絵/繪視為 alias。"
+  },
+  "aliases": [
+    {"district": "龜山區", "source_name": "鉑?", "address_hint": "文化一路|文桃路", "canonical_name": "興富發鉑悦", "aliases": ["鉑悦", "鉑悅", "興富發鉑悅"], "evidence_url": "https://www.highwealthgroup.com.tw/property/%E8%88%88%E5%AF%8C%E7%99%BC%E9%89%91%E6%82%A6", "evidence_type": "developer_official", "confidence": "high"},
+    {"district": "中壢區", "source_name": "站前新?", "address_hint": "青山路|青心路", "canonical_name": "站前新鋭", "aliases": ["站前新銳", "站前新鋭"], "evidence_url": "https://newhouse.591.com.tw/131115/detail", "evidence_type": "listing", "confidence": "high"},
+    {"district": "中壢區", "source_name": "大清城?", "address_hint": "松勇路|松義路", "canonical_name": "大清城双", "aliases": ["大清城雙", "大清城双"], "evidence_url": "https://cheny-shuang.tw/", "evidence_type": "developer_official", "confidence": "high"},
+    {"district": "龜山區", "source_name": "富堡菁英?", "address_hint": "文化一路|樂善二路", "canonical_name": "富堡菁英滙", "aliases": ["富堡菁英匯", "富堡菁英滙"], "evidence_url": "https://market.591.com.tw/5923057", "evidence_type": "listing", "confidence": "high"},
+    {"district": "龜山區", "source_name": "鴻廣?青", "address_hint": "長慶一街", "canonical_name": "鴻廣絵青", "aliases": ["鴻廣繪青", "鴻廣絵青"], "evidence_url": "https://market.591.com.tw/5884225/overview", "evidence_type": "listing", "confidence": "high"},
+    {"district": "桃園區", "source_name": "益騏新?峰", "address_hint": "文中三路|正光二街", "canonical_name": "益騏新画峰", "aliases": ["益騏新畫峰", "益騏新画峰"], "evidence_url": "https://dualtaipei.datazen.info/taoyuan/project/%E7%9B%8A%E9%A8%8F%E6%96%B0%E7%94%BB%E5%B3%B0", "evidence_type": "aggregator", "confidence": "high"},
+    {"district": "中壢區", "source_name": "HLV.?", "address_hint": "環溪四街", "canonical_name": "HLV‧栢", "aliases": ["HLV栢", "HLV‧栢"], "evidence_url": "https://newhouse.591.com.tw/134160", "evidence_type": "listing", "confidence": "high"},
+    {"district": "中壢區", "source_name": "昆旺青茵?", "address_hint": "聖德路一段", "canonical_name": "昆旺青茵悦", "aliases": ["昆旺青茵悅", "昆旺青茵悦"], "evidence_url": "https://community.yungching.com.tw/building/86736", "evidence_type": "community", "confidence": "high"},
+    {"district": "中壢區", "source_name": "宏普?時代-時代苑", "address_hint": "", "canonical_name": "宏普画時代-時代苑", "aliases": ["宏普畫時代-時代苑"], "evidence_url": "https://www.hong-pu.com.tw/", "evidence_type": "developer_official", "confidence": "high"},
+    {"district": "中壢區", "source_name": "宏普?時代-時尚苑", "address_hint": "", "canonical_name": "宏普画時代-時尚苑", "aliases": ["宏普畫時代-時尚苑"], "evidence_url": "https://www.hong-pu.com.tw/", "evidence_type": "developer_official", "confidence": "high"},
+    {"district": "中壢區", "source_name": "宏普?時代-時晴苑", "address_hint": "", "canonical_name": "宏普画時代-時晴苑", "aliases": ["宏普畫時代-時晴苑"], "evidence_url": "https://www.hong-pu.com.tw/", "evidence_type": "developer_official", "confidence": "high"},
+    {"district": "桃園區", "source_name": "?讀伊頓", "address_hint": "國際路二段", "canonical_name": "悅讀伊頓", "aliases": ["悅讀伊頓", "悦讀伊頓"], "evidence_url": "", "evidence_type": "address_inference", "confidence": "medium", "notes": "地址+命名推斷，待建照/官方最終確認"}
+  ],
+  "low_confidence": [
+    {"district": "桃園區", "source_name": "昭揚天?", "address_hint": "朝陽街", "suggested": "昭揚天鋭", "reason": "昭揚有多個『天』系列，需核對建照或地址後才可套用", "confidence": "low"}
+  ]
+}
