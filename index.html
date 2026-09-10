@@ -632,14 +632,14 @@
     function isUnavailable(value = state.month) { return ['official_pending','unpublished'].includes(monthStatus(value)); }
     function sampleDisplay(value) { return (isUnavailable() || !value) ? '—' : n(value); }
     function statusLabel(value = state.month) {
-      return ({complete:'資料已覆蓋', local_source_gap:'本站來源缺口', official_pending:'官方陸續登錄中', mixed:'部分缺口·部分待發布', backfilling:'正在回補', unpublished:'尚未發布'})[monthStatus(value)] || '資料已覆蓋';
+      return ({complete:'資料已覆蓋', local_source_gap:'本站來源缺口', official_pending:'官方陸續登錄中', mixed:'部分缺口·部分待發布', backfilling:'動態回補·待對帳', unpublished:'尚未發布'})[monthStatus(value)] || '資料已覆蓋';
     }
     function statusSentence() {
       const status = monthStatus();
       if (status === 'local_source_gap') return '<span class="status-gap">本月官方已可查，但本站尚未回補這段來源，數字不完整、暫不與完整月份比較</span>';
       if (status === 'official_pending') return '<span class="status-gap">官方依每旬時程陸續登錄中，本月尚未完整發布，0 筆不代表沒有成交</span>';
       if (status === 'mixed') return '<span class="status-gap">本月部分窗口本站缺口、部分官方尚未發布，數字不完整</span>';
-      if (status === 'backfilling') return '<span class="status-live">本月來源正在回補中，暫不與完整月份相比</span>';
+      if (status === 'backfilling') return '<span class="status-live">本月以官方動態查詢回補，數字接近完整；待官方季度封存(115S3)發布後再權威對帳</span>';
       return '本月為完整登錄觀察期';
     }
 
@@ -948,7 +948,7 @@
       $('#heroStatus').innerHTML = status === 'complete' ? '● 資料已覆蓋・可比較量能'
         : status === 'local_source_gap' ? '<span class="status-gap">● 本站來源缺口</span>・資料不完整'
         : status === 'mixed' ? '<span class="status-gap">● 部分缺口·部分待發布</span>・不完整'
-        : status === 'backfilling' ? '<span class="status-live">● 正在回補</span>・數量尚未完整'
+        : status === 'backfilling' ? '<span class="status-live">● 動態回補</span>・待官方對帳'
         : '<span class="status-gap">● 官方陸續登錄中</span>・不可判讀為零成交';
       $('#heroMarket').textContent = marketLabel();
       $('#heroScope').textContent = state.district || '桃園市';
@@ -970,7 +970,7 @@
       $('#yearSelect').value = curYear;
       const ymonths = avail.filter(m => m.slice(0,4) === curYear).sort().reverse();
       $('#monthSelect').innerHTML = ymonths.map(value => {
-        const suffix = ({local_source_gap:'（本站缺口）', official_pending:'（官方登錄中）', mixed:'（部分缺口）', backfilling:'（回補中）', unpublished:'（未發布）'})[monthStatus(value)] || '';
+        const suffix = ({local_source_gap:'（本站缺口）', official_pending:'（官方登錄中）', mixed:'（部分缺口）', backfilling:'（動態回補）', unpublished:'（未發布）'})[monthStatus(value)] || '';
         return `<option value="${value}">${Number(value.slice(5))} 月${suffix}</option>`;
       }).join('');
       $('#monthSelect').value = state.month;
