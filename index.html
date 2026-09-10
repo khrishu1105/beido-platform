@@ -155,6 +155,10 @@
       width: 100%; min-height: 44px; border: 0; border-bottom: 1px solid var(--ink);
       background: transparent; color: var(--ink); padding: 0 28px 0 2px; cursor: pointer;
     }
+    .ym-pick { display: flex; gap: 14px; }
+    .ym-pick select { min-width: 92px; }
+    .ym-pick select:first-child { flex: 0 0 92px; }
+    .ym-pick select:last-child { flex: 1; }
     .share-button {
       height: 44px; min-width: 120px; border: 1px solid var(--night); background: transparent;
       cursor: pointer; padding: 0 18px; transition: .2s ease;
@@ -524,8 +528,8 @@
         </div>
       </div>
       <div class="control-group">
-        <label for="monthSelect">交易月份</label>
-        <select id="monthSelect"></select>
+        <label for="yearSelect">交易年月</label>
+        <div class="ym-pick"><select id="yearSelect" aria-label="交易年份"></select><select id="monthSelect" aria-label="交易月份"></select></div>
       </div>
       <button class="share-button" id="shareButton" type="button">分享本頁</button>
     </div>
@@ -571,6 +575,7 @@
 
     let DATA = null, PROJECTS = null;
     const PROJECT_CACHE = {};
+    const SNAP = {};
     const state = { market: 'presale', month: '', district: '', project: null, range: 24, rankBy: 'price', cityTab: 'rank' };
 
     const fmt = new Intl.NumberFormat('zh-TW');
@@ -596,8 +601,16 @@
       return `<article class="kpi"><div class="kpi-label">${label}</div><div class="kpi-value">${value}<small>${unit}</small></div><div class="kpi-meta">${meta}</div></article>`;
     }
 
-    function getSnapshot() {
-      return DATA.markets[state.market].snapshots[state.month];
+    function snapKey() { return state.market + '|' + state.month; }
+    function emptyCity() { return {city:{sample_count:0, median_unit_price:null, median_total_price:null, district_ranking:[], trailing_12:null, trailing_24:null, trailing_36:null}, districts:{}}; }
+    function getSnapshot() { return SNAP[snapKey()] || emptyCity(); }
+    async function ensureSnapshot() {
+      const key = snapKey();
+      if (SNAP[key]) return;
+      try {
+        const response = await fetch(`./data/snapshots/${state.market}/${state.month}.json`, {cache:'no-store'});
+        SNAP[key] = response.ok ? await response.json() : emptyCity();
+      } catch (_) { SNAP[key] = emptyCity(); }
     }
 
     function marketLabel() { return DATA.markets[state.market].label; }
@@ -744,7 +757,7 @@
             ${kpi('成交單價中位數', one(city.median_unit_price), '萬／坪', changeMarkup(city.year_over_year,'較去年同期'))}
             ${kpi(isIncomplete()?'目前資料筆數':'本月成交件數', sampleDisplay(city.sample_count), isUnavailable()?'':'件', isUnavailable()?'不可解讀為零成交':changeMarkup(city.month_over_month,'單價較上月'))}
             ${kpi('成交總價中位數', n(city.median_total_price), '萬元', `樣本 ${n(city.sample_count)} 件`)}
-            ${kpi('近 12 月樣本', n(city.trailing_12.sample_count), '件', `全市行情基礎`)}
+            ${kpi('近 12 月樣本', n((city.trailing_12||{}).sample_count), '件', `全市行情基礎`)}
           </div>
           <p class="editorial-read">${cityInsight(city)}</p>
         </section>
@@ -782,19 +795,20 @@
     }
 
     function percentilePanel(snapshot) {
-      const t = snapshot.trailing_12;
-      if (t.p50_unit_price == null) return `<div class="data-panel"><div class="empty-state"><strong>分位樣本不足</strong>近 12 月至少需要 4 筆有效單價。</div></div>`;
+      const t = snapshot['trailing_' + state.range];
+      if (!t || t.p50_unit_price == null) return `<div class="data-panel"><div class="empty-state"><strong>分位樣本不足</strong>近 ${state.range} 月至少需要 4 筆有效單價。</div></div>`;
       const min = Math.max(0, t.p25_unit_price - (t.p75_unit_price-t.p25_unit_price)*.5);
       const max = t.p75_unit_price + (t.p75_unit_price-t.p25_unit_price)*.5 || t.p75_unit_price+1;
       const pos = value => 6 + (value-min)/(max-min)*88;
-      return `<div class="data-panel distribution"><h3>主力成交帶</h3><p>近 12 個月中間一半的成交落在 P25 至 P75，P50 是典型成交位置。</p><div class="percentile-scale"><div class="percentile-line"></div><div class="percentile-point" style="left:${pos(t.p25_unit_price)}%"><span><b>${one(t.p25_unit_price)}</b><small>P25 萬／坪</small></span></div><div class="percentile-point median" style="left:${pos(t.p50_unit_price)}%"><span><b>${one(t.p50_unit_price)}</b><small>P50 萬／坪</small></span></div><div class="percentile-point" style="left:${pos(t.p75_unit_price)}%"><span><b>${one(t.p75_unit_price)}</b><small>P75 萬／坪</small></span></div></div><table class="triplet-table"><thead><tr><th>統計項目</th><th>P25</th><th>P50</th><th>P75</th></tr></thead><tbody><tr><td>成交總價（萬）</td><td>${n(t.p25_total_price)}</td><td class="median-cell">${n(t.p50_total_price)}</td><td>${n(t.p75_total_price)}</td></tr><tr><td>建物坪數（坪）</td><td>${one(t.p25_ping)}</td><td class="median-cell">${one(t.p50_ping)}</td><td>${one(t.p75_ping)}</td></tr></tbody></table></div>`;
+      return `<div class="data-panel distribution"><h3>主力成交帶</h3><p>近 ${state.range} 個月中間一半的成交落在 P25 至 P75，P50 是典型成交位置。</p><div class="percentile-scale"><div class="percentile-line"></div><div class="percentile-point" style="left:${pos(t.p25_unit_price)}%"><span><b>${one(t.p25_unit_price)}</b><small>P25 萬／坪</small></span></div><div class="percentile-point median" style="left:${pos(t.p50_unit_price)}%"><span><b>${one(t.p50_unit_price)}</b><small>P50 萬／坪</small></span></div><div class="percentile-point" style="left:${pos(t.p75_unit_price)}%"><span><b>${one(t.p75_unit_price)}</b><small>P75 萬／坪</small></span></div></div><table class="triplet-table"><thead><tr><th>統計項目</th><th>P25</th><th>P50</th><th>P75</th></tr></thead><tbody><tr><td>成交總價（萬）</td><td>${n(t.p25_total_price)}</td><td class="median-cell">${n(t.p50_total_price)}</td><td>${n(t.p75_total_price)}</td></tr><tr><td>建物坪數（坪）</td><td>${one(t.p25_ping)}</td><td class="median-cell">${one(t.p50_ping)}</td><td>${one(t.p75_ping)}</td></tr></tbody></table></div>`;
     }
 
     function mixPanel(snapshot) {
-      const rows = snapshot.type_mix || [];
+      const t = snapshot['trailing_' + state.range] || {};
+      const rows = t.type_mix || [];
       const title = state.market === 'presale' ? '房型組成' : '建物型態';
       const bars = rows.slice(0,6).map(item => `<div class="mix-row"><div class="mix-row-head"><span>${esc(item.label)}</span><span>${one(item.percentage)}%・${n(item.count)} 件</span></div><div class="mix-track"><div class="mix-fill" style="width:${item.percentage}%"></div></div></div>`).join('');
-      return `<div class="data-panel mix-panel"><h3>${title}</h3><p>近 12 個月成交組成，協助辨認價格變化是否來自產品差異。</p>${bars || '<div class="empty-state">尚無產品組成資料</div>'}</div>`;
+      return `<div class="data-panel mix-panel"><h3>${title}</h3><p>近 ${state.range} 個月成交組成，協助辨認價格變化是否來自產品差異。</p>${bars || '<div class="empty-state">尚無產品組成資料</div>'}</div>`;
     }
 
     function populationPanel(district) {
@@ -881,7 +895,7 @@
           ${kpi('本月單價中位數', one(snapshot.median_unit_price), '萬／坪', changeMarkup(snapshot.year_over_year,'較去年同期'))}
           ${kpi(isIncomplete()?'目前資料筆數':'本月成交件數', sampleDisplay(snapshot.sample_count), isUnavailable()?'':'件', isUnavailable()?'不可解讀為零成交':changeMarkup(snapshot.month_over_month,'單價較上月'))}
           ${kpi('本月總價中位數', n(snapshot.median_total_price), '萬元', `樣本 ${n(snapshot.sample_count)} 件`)}
-          ${kpi('近 12 月成交', n(snapshot.trailing_12.sample_count), '件', `占全市 ${one(snapshot.trailing_12.share_of_city)}%`)}
+          ${kpi(`近 ${state.range} 月成交`, n((snapshot['trailing_'+state.range]||{}).sample_count), '件', `占全市 ${one((snapshot['trailing_'+state.range]||{}).share_of_city)}%`)}
         </div></section>
         ${populationPanel(district)}
         <section class="section"><div class="section-heading-row"><div><p class="section-kicker">Context / 04</p><h2>區域價格放回全市看</h2></div><p class="section-deck">單一數字沒有脈絡。先看同期基準，再回到這個行政區自己的時間序列。</p></div>${comparisonPanel(snapshot,district)}<div style="height:26px"></div>${chartPanel(`${district}月度走勢`, `${marketLabel()}・截至 ${monthLabel(state.month)}`, district)}</section>
@@ -890,7 +904,7 @@
     }
 
     function bindRenderedEvents() {
-      $$('[data-range]').forEach(button => button.addEventListener('click', () => { state.range = Number(button.dataset.range); render(); }));
+      $$('[data-range]').forEach(button => button.addEventListener('click', () => navigate({range: Number(button.dataset.range)}, true)));
       $$('[data-rank]').forEach(button => button.addEventListener('click', () => { state.rankBy = button.dataset.rank; render(); }));
       $$('.linked-district').forEach(element => {
         element.addEventListener('click', () => navigate({district: element.dataset.district}));
@@ -931,10 +945,15 @@
         button.classList.toggle('is-active', active);
         button.setAttribute('aria-pressed', String(active));
       });
-      const months = [...DATA.meta.available_months].reverse();
-      $('#monthSelect').innerHTML = months.map(value => {
-        const suffix = ({backfill:'（資料回補中）',gap:'（來源缺口）',unpublished:'（尚未發布）'})[monthStatus(value)] || '';
-        return `<option value="${value}">${monthLabel(value)}${suffix}</option>`;
+      const avail = [...marketMeta().available_months];
+      const years = [...new Set(avail.map(m => m.slice(0,4)))].sort().reverse();
+      const curYear = state.month.slice(0,4);
+      $('#yearSelect').innerHTML = years.map(y => `<option value="${y}">${y} 年</option>`).join('');
+      $('#yearSelect').value = curYear;
+      const ymonths = avail.filter(m => m.slice(0,4) === curYear).sort().reverse();
+      $('#monthSelect').innerHTML = ymonths.map(value => {
+        const suffix = ({backfill:'（登錄中）',gap:'（缺口）',unpublished:'（未發布）'})[monthStatus(value)] || '';
+        return `<option value="${value}">${Number(value.slice(5))} 月${suffix}</option>`;
       }).join('');
       $('#monthSelect').value = state.month;
     }
@@ -946,12 +965,15 @@
       if (state.district) url.searchParams.set('district', state.district); else url.searchParams.delete('district');
       if (state.project) url.searchParams.set('project', state.project); else url.searchParams.delete('project');
       if (state.cityTab && state.cityTab !== 'rank') url.searchParams.set('tab', state.cityTab); else url.searchParams.delete('tab');
+      if (state.range && state.range !== 24) url.searchParams.set('range', state.range); else url.searchParams.delete('range');
       (replace ? history.replaceState : history.pushState).call(history, {...state}, '', url);
     }
 
-    function navigate(patch, replace = false) {
+    async function navigate(patch, replace = false) {
       Object.assign(state, patch);
+      if (!marketMeta().available_months.includes(state.month)) state.month = marketMeta().complete_month;
       updateUrl(replace);
+      await ensureSnapshot();
       render();
       if (patch.district !== undefined) document.querySelector('#main').scrollIntoView({behavior:'smooth',block:'start'});
     }
@@ -976,9 +998,13 @@
         if (button && button.dataset.market !== state.market) navigate({market:button.dataset.market});
       });
       $('#monthSelect').addEventListener('change', event => navigate({month:event.target.value}));
+      $('#yearSelect').addEventListener('change', event => {
+        const ms = marketMeta().available_months.filter(m => m.slice(0,4) === event.target.value).sort();
+        if (ms.length) navigate({month: ms[ms.length-1]});
+      });
       $('#shareButton').addEventListener('click', sharePage);
       $('#brandHome').addEventListener('click', event => { event.preventDefault(); navigate({district:'', project:null}); window.scrollTo({top:0,behavior:'smooth'}); });
-      window.addEventListener('popstate', () => { readUrlState(); render(); });
+      window.addEventListener('popstate', async () => { readUrlState(); await ensureSnapshot(); render(); });
     }
 
     async function sharePage() {
@@ -999,12 +1025,14 @@
       const selectedMonth = params.get('month');
       const district = params.get('district');
       state.market = DATA.markets[market] ? market : 'presale';
-      state.month = DATA.meta.available_months.includes(selectedMonth) ? selectedMonth : marketMeta().complete_month;
+      state.month = marketMeta().available_months.includes(selectedMonth) ? selectedMonth : marketMeta().complete_month;
       state.district = DATA.meta.districts.includes(district) ? district : '';
       const project = params.get('project');
       state.project = project ? Number(project) : null;
       const tab = params.get('tab');
       state.cityTab = ['rank','grid','map','tx'].includes(tab) ? tab : 'rank';
+      const range = Number(params.get('range'));
+      state.range = [12,24,36].includes(range) ? range : 24;
     }
 
     async function loadData() {
@@ -1014,7 +1042,7 @@
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         DATA = await response.json();
         try { PROJECTS = await (await fetch('./data/projects/index.json', {cache:'no-store'})).json(); } catch (_) { PROJECTS = null; }
-        readUrlState(); setupControls(); updateUrl(true); render();
+        readUrlState(); setupControls(); updateUrl(true); await ensureSnapshot(); render();
         $('#loading').hidden = true; $('#app').hidden = false;
       } catch (error) {
         $('#loading').hidden = true; $('#error').hidden = false;
