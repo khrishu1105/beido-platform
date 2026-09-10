@@ -407,6 +407,42 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
     }
+    .city-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .city-tab { display: flex; align-items: center; gap: 14px; text-align: left; padding: 18px 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper-white); cursor: pointer; transition: transform .18s, border-color .18s; }
+    .city-tab:hover { border-color: var(--gold-deep); transform: translateY(-2px); }
+    .city-tab .ct-no { font-size: 22px; font-weight: 700; color: var(--gold-deep); letter-spacing: 1px; opacity: .55; }
+    .city-tab .ct-body { display: flex; flex-direction: column; gap: 3px; }
+    .city-tab .ct-body b { font-size: 16px; color: var(--ink); }
+    .city-tab .ct-body small { font-size: 12px; color: var(--muted); line-height: 1.35; }
+    .city-tab.is-active { background: var(--ink); border-color: var(--ink); }
+    .city-tab.is-active .ct-no { color: var(--gold); opacity: 1; }
+    .city-tab.is-active .ct-body b { color: var(--paper); }
+    .city-tab.is-active .ct-body small { color: rgba(255,255,255,.68); }
+    @media (max-width: 860px) { .city-tabs { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .city-tabs { grid-template-columns: 1fr; } }
+    .district-list.wide { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; max-height: none; overflow: visible; padding-right: 0; margin-top: 0; }
+    .district-list.wide button { grid-template-columns: 1fr; gap: 4px; align-items: start; padding: 16px 18px; border: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 10px; background: var(--paper-white); color: var(--ink); transition: transform .18s, border-color .18s; }
+    .district-list.wide button:hover { color: var(--ink); border-color: var(--gold-deep); transform: translateY(-2px); }
+    .district-list.wide b { font-size: 17px; color: var(--ink); }
+    .district-list.wide span { font-size: 15px; color: var(--gold-deep); font-weight: 600; }
+    .district-list.wide small { color: var(--muted); font-size: 12px; }
+    .tx-scroll { max-height: 560px; overflow: auto; }
+    .tx-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .tx-table th, .tx-table td { padding: 9px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+    .tx-table th { position: sticky; top: 0; background: var(--paper-white); color: var(--muted); font-weight: 600; font-size: 12px; z-index: 1; }
+    .tx-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    .tx-dist { background: none; border: none; color: var(--gold-deep); cursor: pointer; font: inherit; padding: 0; text-decoration: underline; }
+    .tx-note { margin-top: 12px; font-size: 12.5px; color: var(--muted); }
+    .district-controls { display: flex; align-items: flex-end; gap: 22px; flex-wrap: wrap; margin: 22px 0 4px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .dc-group { display: flex; flex-direction: column; gap: 7px; }
+    .dc-label { font-size: 12.5px; color: var(--muted); letter-spacing: 1px; }
+    .dc-select { font: inherit; font-size: 15px; padding: 11px 16px; border: 1.5px solid var(--gold-deep); border-radius: 6px; background: var(--paper-white); color: var(--ink); min-width: 150px; cursor: pointer; }
+    .period-switch { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 6px; overflow: hidden; }
+    .period-switch button { font: inherit; font-size: 14px; font-weight: 600; padding: 10px 18px; border: none; background: var(--paper-white); color: var(--muted); cursor: pointer; }
+    .period-switch button.is-active { background: var(--ink); color: var(--paper); }
+    .dc-share { margin-left: auto; font: inherit; font-size: 14px; font-weight: 600; padding: 11px 20px; border: 1.5px solid var(--gold-deep); border-radius: 6px; background: transparent; color: var(--gold-deep); cursor: pointer; align-self: flex-end; }
+    .dc-share:hover { background: var(--gold-deep); color: #fff; }
+    @media (max-width: 720px) { .dc-share { margin-left: 0; } }
     .project-list.scrolly { max-height: 520px; overflow-y: auto; }
     .linked-project { width: 100%; text-align: left; background: transparent; border: none; border-bottom: 1px solid var(--line); cursor: pointer; font: inherit; color: inherit; padding: 11px 6px; display: flex; align-items: center; gap: 12px; transition: background .15s; }
     .linked-project:last-child { border-bottom: none; }
@@ -535,7 +571,7 @@
 
     let DATA = null, PROJECTS = null;
     const PROJECT_CACHE = {};
-    const state = { market: 'presale', month: '', district: '', project: null, range: 24, rankBy: 'price' };
+    const state = { market: 'presale', month: '', district: '', project: null, range: 24, rankBy: 'price', cityTab: 'rank' };
 
     const fmt = new Intl.NumberFormat('zh-TW');
     const $ = (selector, root = document) => root.querySelector(selector);
@@ -666,21 +702,36 @@
       return `<div class="data-panel"><div class="panel-head"><div><h3>行政區排行</h3><p>${monthLabel(state.month)}・點擊進入區域分析</p></div><div class="rank-switch"><button type="button" data-rank="price" class="${state.rankBy==='price'?'is-active':''}">單價</button><button type="button" data-rank="volume" class="${state.rankBy==='volume'?'is-active':''}">量能</button></div></div><div class="ranking">${rows || '<div class="empty-state">本月尚無排行資料</div>'}</div></div>`;
     }
 
-    function districtExplorer(city) {
+    function districtMap(city) {
       const lookup = Object.fromEntries((city.district_ranking || []).map(item => [item.district,item]));
       const maxCount = Math.max(...Object.values(lookup).map(item => item.sample_count), 1);
-      const nodes = DATA.meta.districts.map(district => {
+      const nodes = DATA.meta.districts.filter(d=>d).map(district => {
         const item = lookup[district] || {sample_count:0,median_unit_price:null};
         const pos = districtPositions[district] || [50,50];
         const size = 62 + Math.sqrt(item.sample_count/maxCount)*46;
         return `<button type="button" class="district-node linked-district" data-district="${district}" style="--x:${pos[0]}%;--y:${pos[1]}%;--size:${size}px" aria-label="查看${district}行情"><b>${district.replace('區','')}</b><small>${item.sample_count?n(item.sample_count)+' 件':'無成交'}</small></button>`;
       }).join('');
-      const ordered = [...DATA.meta.districts].sort((a,b)=>(lookup[b]?.sample_count||0)-(lookup[a]?.sample_count||0));
+      return `<div class="district-stage" aria-label="桃園行政區相對位置索引">${nodes}</div><div class="map-disclaimer">圓點大小代表本月成交量・相對位置索引，非行政界線地圖・點圓點進入該區分析</div>`;
+    }
+
+    function districtGrid(city) {
+      const lookup = Object.fromEntries((city.district_ranking || []).map(item => [item.district,item]));
+      const ordered = [...DATA.meta.districts].filter(d=>d).sort((a,b)=>(lookup[b]?.sample_count||0)-(lookup[a]?.sample_count||0));
       const list = ordered.map(district => {
         const item = lookup[district] || {sample_count:0,median_unit_price:null};
         return `<button type="button" class="linked-district" data-district="${district}"><b>${district}</b><span>${one(item.median_unit_price)} 萬</span><small>${n(item.sample_count)} 件</small></button>`;
       }).join('');
-      return `<div class="district-layout"><div class="district-stage" aria-label="桃園行政區相對位置索引">${nodes}</div><div class="district-index"><p class="section-kicker">District Index / 13</p><h3>從行政區繼續追問</h3><p>圓點大小代表本月成交量。選擇任一行政區，價格趨勢、分位與成交明細會沿用目前市場及月份。</p><div class="district-list">${list}</div><div class="map-disclaimer">相對位置索引・非行政界線地圖</div></div></div>`;
+      return `<div class="district-list wide">${list}</div>`;
+    }
+
+    function cityTransactions() {
+      const snap = getSnapshot().districts || {};
+      let rows = [];
+      DATA.meta.districts.filter(d=>d).forEach(d => (snap[d]?.recent_transactions || []).forEach(t => rows.push({...t, district:d})));
+      rows.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+      rows = rows.slice(0, 50);
+      const body = rows.map(t => `<tr><td>${t.date||''}</td><td><button type="button" class="tx-dist linked-district" data-district="${t.district}">${t.district}</button></td><td>${esc(t.project||'—')}</td><td>${esc(t.type||'')}</td><td class="num">${one(t.unit_price)}</td><td class="num">${n(t.total_price)}</td><td class="num">${one(t.ping)}</td></tr>`).join('');
+      return `<div class="data-panel"><div class="panel-head"><div><h3>全市最新成交</h3><p>${marketLabel()}・${monthLabel(state.month)}・彙整各區最新登錄，取最近 50 筆</p></div></div><div class="tx-scroll"><table class="tx-table"><thead><tr><th>登錄日</th><th>行政區</th><th>建案／社區</th><th>型態</th><th>單價</th><th>總價</th><th>坪數</th></tr></thead><tbody>${body || '<tr><td colspan="7">本月尚無成交資料</td></tr>'}</tbody></table></div><p class="tx-note">點行政區可看該區完整逐筆與各建案生命週期。</p></div>`;
     }
 
     function renderCity() {
@@ -697,8 +748,30 @@
           </div>
           <p class="editorial-read">${cityInsight(city)}</p>
         </section>
-        <section class="section" aria-labelledby="trendTitle"><div class="section-heading-row"><div><p class="section-kicker">Movement / 02</p><h2 id="trendTitle">價格與量能，不分開看</h2></div><p class="section-deck">柱狀看成交量，折線看單價中位數。切換月份後，時間軸會停在你選定的觀察點。</p></div><div class="analysis-grid">${chartPanel('桃園市月度走勢', `${marketLabel()}・截至 ${monthLabel(state.month)}`)}${rankingPanel(city)}</div></section>
-        <section class="section" aria-labelledby="districtTitle"><div class="section-heading-row"><div><p class="section-kicker">Districts / 03</p><h2 id="districtTitle">十三區，不是一個市場</h2></div><p class="section-deck">同一月份裡，各區的產品組成與成交熱度差異很大。點下去，再看這個價格是如何形成的。</p></div>${districtExplorer(city)}</section>`;
+        <section class="section city-nav-section" aria-label="成交行情入口">
+          <div class="city-tabs">${cityTabMenu()}</div>
+        </section>
+        <section class="section" id="cityTabZone">${cityTabContent(city)}</section>`;
+    }
+
+    function cityTabMenu() {
+      const tabs = [
+        {k:'rank', n:'01', t:'房價排行', d:'各區單價高低與本月熱區'},
+        {k:'grid', n:'02', t:'桃園13區房市', d:'逐區點入看價格、人口、建案'},
+        {k:'map',  n:'03', t:'地圖看數據', d:'相對位置與成交熱度'},
+        {k:'tx',   n:'04', t:'逐筆成交', d:'查詢最新完整實登'}
+      ];
+      return tabs.map(x => `<button type="button" class="city-tab ${state.cityTab===x.k?'is-active':''}" data-citytab="${x.k}"><span class="ct-no">${x.n}</span><span class="ct-body"><b>${x.t}</b><small>${x.d}</small></span></button>`).join('');
+    }
+
+    function cityTabContent(city) {
+      if (state.cityTab === 'grid')
+        return `<div class="section-heading-row"><div><p class="section-kicker">Districts / 13</p><h2>桃園十三區，不是一個市場</h2></div><p class="section-deck">各區產品組成與熱度差異很大。點任一區，價格趨勢、分位、人口與成交明細會沿用目前市場與月份。</p></div>${districtGrid(city)}`;
+      if (state.cityTab === 'map')
+        return `<div class="section-heading-row"><div><p class="section-kicker">Map / 地圖看數據</p><h2>地圖上的成交熱度</h2></div><p class="section-deck">圓點大小代表本月成交量，點下去看該區完整分析。</p></div>${districtMap(city)}`;
+      if (state.cityTab === 'tx')
+        return `<div class="section-heading-row"><div><p class="section-kicker">Transactions / 逐筆成交</p><h2>全市最新逐筆成交</h2></div><p class="section-deck">彙整各區最新登錄，切換月份後停在你選定的觀察點。</p></div>${cityTransactions()}`;
+      return `<div class="section-heading-row"><div><p class="section-kicker">Ranking / 房價排行</p><h2>價格與量能，不分開看</h2></div><p class="section-deck">柱狀看成交量、折線看單價中位數；右側依單價或量能排出各區順位。</p></div><div class="analysis-grid">${chartPanel('桃園市月度走勢', `${marketLabel()}・截至 ${monthLabel(state.month)}`)}${rankingPanel(city)}</div>`;
     }
 
     function comparisonPanel(snapshot, district) {
@@ -797,6 +870,13 @@
       const status = statusLabel();
       $('#districtView').innerHTML = `<button class="district-back" type="button" id="backToCity">返回桃園全市</button>
         <div class="district-title-row"><div><p class="section-kicker">Taoyuan District / ${state.month}</p><h1>${district}</h1></div><p>${marketLabel()}・${monthLabel(state.month)}・${status}。本頁所有比較沿用相同市場與月份，不會在下鑽時偷換資料口徑。</p></div>
+        <div class="district-controls">
+          <div class="dc-group"><span class="dc-label">切換行政區</span>
+            <select id="districtSelect" class="dc-select">${DATA.meta.districts.filter(d=>d).map(d=>`<option value="${d}" ${d===district?'selected':''}>${d}</option>`).join('')}</select></div>
+          <div class="dc-group"><span class="dc-label">趨勢期間</span>
+            <div class="period-switch">${[12,24,36].map(v=>`<button type="button" data-range="${v}" class="${state.range===v?'is-active':''}">${v} 個月</button>`).join('')}</div></div>
+          <button type="button" class="dc-share" id="shareDistrict">分享本區 →</button>
+        </div>
         <section class="section" aria-label="${district}成交快照"><div class="kpi-grid">
           ${kpi('本月單價中位數', one(snapshot.median_unit_price), '萬／坪', changeMarkup(snapshot.year_over_year,'較去年同期'))}
           ${kpi(isIncomplete()?'目前資料筆數':'本月成交件數', sampleDisplay(snapshot.sample_count), isUnavailable()?'':'件', isUnavailable()?'不可解讀為零成交':changeMarkup(snapshot.month_over_month,'單價較上月'))}
@@ -821,6 +901,9 @@
       });
       $('#backToCity')?.addEventListener('click', () => navigate({district:''}));
       $$('.linked-project').forEach(el => el.addEventListener('click', () => navigate({project: Number(el.dataset.pid)})));
+      $('#districtSelect')?.addEventListener('change', event => navigate({district: event.target.value}));
+      $('#shareDistrict')?.addEventListener('click', sharePage);
+      $$('[data-citytab]').forEach(button => button.addEventListener('click', () => { navigate({cityTab: button.dataset.citytab}, true); const nav = $('.city-nav-section'); if (nav) window.scrollTo({top: nav.offsetTop - 80, behavior:'smooth'}); }));
     }
 
     function syncDistrictHover(district, active) {
@@ -862,6 +945,7 @@
       url.searchParams.set('month', state.month);
       if (state.district) url.searchParams.set('district', state.district); else url.searchParams.delete('district');
       if (state.project) url.searchParams.set('project', state.project); else url.searchParams.delete('project');
+      if (state.cityTab && state.cityTab !== 'rank') url.searchParams.set('tab', state.cityTab); else url.searchParams.delete('tab');
       (replace ? history.replaceState : history.pushState).call(history, {...state}, '', url);
     }
 
@@ -893,7 +977,7 @@
       });
       $('#monthSelect').addEventListener('change', event => navigate({month:event.target.value}));
       $('#shareButton').addEventListener('click', sharePage);
-      $('#brandHome').addEventListener('click', event => { event.preventDefault(); navigate({district:''}); });
+      $('#brandHome').addEventListener('click', event => { event.preventDefault(); navigate({district:'', project:null}); window.scrollTo({top:0,behavior:'smooth'}); });
       window.addEventListener('popstate', () => { readUrlState(); render(); });
     }
 
@@ -919,6 +1003,8 @@
       state.district = DATA.meta.districts.includes(district) ? district : '';
       const project = params.get('project');
       state.project = project ? Number(project) : null;
+      const tab = params.get('tab');
+      state.cityTab = ['rank','grid','map','tx'].includes(tab) ? tab : 'rank';
     }
 
     async function loadData() {
