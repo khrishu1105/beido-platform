@@ -447,6 +447,16 @@
     .dc-share { margin-left: auto; font: inherit; font-size: 14px; font-weight: 600; padding: 11px 20px; border: 1.5px solid var(--gold-deep); border-radius: 6px; background: transparent; color: var(--gold-deep); cursor: pointer; align-self: flex-end; }
     .dc-share:hover { background: var(--gold-deep); color: #fff; }
     @media (max-width: 720px) { .dc-share { margin-left: 0; } }
+    .proj-tabs { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
+    .proj-tab { font: inherit; font-size: 15px; font-weight: 600; padding: 12px 26px; border: none; background: var(--paper-white); color: var(--muted); cursor: pointer; }
+    .proj-tab.is-active { background: var(--ink); color: var(--paper); }
+    .proj-tab:disabled { opacity: .4; cursor: not-allowed; }
+    .proj-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .proj-chip { font: inherit; font-size: 13px; padding: 7px 14px; border: 1px solid var(--line-strong); border-radius: 20px; background: var(--paper-white); color: var(--muted); cursor: pointer; }
+    .proj-chip.is-active { background: var(--gold-deep); color: #fff; border-color: var(--gold-deep); }
+    .load-more-wrap { text-align: center; margin-top: 16px; }
+    .load-more { font: inherit; font-size: 14px; font-weight: 600; padding: 11px 28px; border: 1.5px solid var(--gold-deep); border-radius: 6px; background: transparent; color: var(--gold-deep); cursor: pointer; }
+    .load-more:hover { background: var(--gold-deep); color: #fff; }
     .project-list.scrolly { max-height: 520px; overflow-y: auto; }
     .linked-project { width: 100%; text-align: left; background: transparent; border: none; border-bottom: 1px solid var(--line); cursor: pointer; font: inherit; color: inherit; padding: 11px 6px; display: flex; align-items: center; gap: 12px; transition: background .15s; }
     .linked-project:last-child { border-bottom: none; }
@@ -577,7 +587,7 @@
     const PROJECT_CACHE = {};
     let REDIRECT = {};
     const SNAP = {};
-    const state = { market: 'presale', month: '', district: '', project: null, range: 24, rankBy: 'price', cityTab: 'rank' };
+    const state = { market: 'presale', month: '', district: '', project: null, range: 24, rankBy: 'price', cityTab: 'rank', projectView: '', projectChip: 'all', projectRows: 50 };
 
     const fmt = new Intl.NumberFormat('zh-TW');
     const $ = (selector, root = document) => root.querySelector(selector);
@@ -861,38 +871,67 @@
     }
 
     function projBadge(kind) {
-      const c = {'預售簽約':'#3f6bb0','預售·解約':'#c0392b','交屋過戶':'#3f6bb0','換約':'#a6771a','中古轉售':'#3f7d68'}[kind] || '#8a836f';
+      const c = {'預售簽約':'#3f6bb0','預售解約':'#c0392b','首次移轉·疑似交屋':'#6a5acd','中古轉售':'#3f7d68','換約':'#a6771a','成屋登錄':'#8a836f'}[kind] || '#8a836f';
       return `<span style="background:${c}1a;color:${c};font-size:11px;padding:2px 8px;border-radius:4px;font-weight:700;white-space:nowrap">${kind}</span>`;
     }
     function shortAddr(a) { return String(a||'').replace(/^桃園市[^區]*區/, ''); }
 
+    function projRow(x) {
+      let extra = '';
+      if (x.ev === 'resale_transfer' && x.punit) {
+        const cu = (x.unit - x.punit) / x.punit * 100, ct = x.ptotal ? (x.total - x.ptotal) / x.ptotal * 100 : null;
+        extra = `<span style="color:${cu>0?'#c0392b':'#3f7d68'}">單價${cu>0?'+':''}${cu.toFixed(1)}%</span>${ct!=null?` <span style="color:${ct>0?'#c0392b':'#3f7d68'}">總價${ct>0?'+':''}${ct.toFixed(1)}%</span>`:''} <small style="color:#8a836f">前手${x.pdate||''}</small>`;
+      }
+      const rt = x.src ? ' <span style="background:#e0f5f0;color:#0a8f77;font-size:9px;padding:1px 5px;border-radius:4px">即時</span>' : '';
+      const rm = parseInt(x.layout||'', 10); const layout = (rm > 8) ? '<span style="color:#8a836f">格局待校正</span>' : esc(x.layout||'');
+      return `<tr><td>${projBadge(x.kindLabel)}${rt}</td><td>${x.date||''}</td><td>${esc(shortAddr(x.addr))}</td><td>${layout}</td><td>${esc(x.floor||'')}</td><td class="numeric">${one(x.deed)}</td><td class="numeric">${x.park?n(x.park):'—'}</td><td class="numeric">${one(x.unit)}</td><td class="numeric">${n(x.total)}</td><td>${extra}</td></tr>`;
+    }
+
     async function renderProject() {
       const pid = state.project;
-      $('#projectView').innerHTML = `<button class="district-back" type="button" id="backToDistrict">← 返回${state.district||'全市'}</button><div class="district-title-row"><div><p class="section-kicker">Project Dossier</p><h1>載入建案資料…</h1></div></div>`;
+      if (!PROJECT_CACHE[pid]) $('#projectView').innerHTML = `<button class="district-back" type="button" id="backToDistrict">← 返回${state.district||'全市'}</button><div class="district-title-row"><div><p class="section-kicker">Project Dossier</p><h1>載入建案資料…</h1></div></div>`;
       $('#backToDistrict')?.addEventListener('click', () => navigate({project:null}));
       let det = PROJECT_CACHE[pid];
       if (!det) { try { det = await (await fetch(`./data/projects/${pid}.json`, {cache:'no-store'})).json(); PROJECT_CACHE[pid] = det; } catch (_) { $('#projectView').innerHTML = '<div class="empty-state">建案資料載入失敗。</div>'; return; } }
       if (state.project !== pid) return;
-      const s = det.summary, all = [];
-      det.presale.forEach(r => all.push({date:r.date,addr:r.addr,layout:r.layout,floor:r.floor,unit:r.unit,total:r.total,deed:r.deed,park:r.park,kind:r.term?'預售·解約':'預售簽約'}));
-      det.resale.forEach(r => all.push({date:r.date,addr:r.addr,layout:r.layout,floor:r.floor,unit:r.unit,total:r.total,deed:r.deed,park:r.park,rt:r.src,kind:({'交屋':'交屋過戶','轉售':'中古轉售','換約':'換約'})[r.flag]||'成屋',prev:(r.flag==='轉售'&&r.punit)?{d:r.pdate,u:r.punit,t:r.ptotal}:null}));
-      all.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-      const body = all.map(x => {
-        let extra='';
-        if (x.prev){const cu=(x.unit-x.prev.u)/x.prev.u*100, ct=x.prev.t?(x.total-x.prev.t)/x.prev.t*100:null;extra=`<span style="color:${cu>0?'#c0392b':'#3f7d68'}">單價${cu>0?'+':''}${cu.toFixed(1)}%</span>${ct!=null?` <span style="color:${ct>0?'#c0392b':'#3f7d68'}">總價${ct>0?'+':''}${ct.toFixed(1)}%</span>`:''} <small style="color:#8a836f">前手${x.prev.d}</small>`;}
-        return `<tr><td>${projBadge(x.kind)}${x.rt?' <span style="background:#e0f5f0;color:#0a8f77;font-size:9px;padding:1px 5px;border-radius:4px">即時</span>':''}</td><td>${x.date||''}</td><td>${esc(shortAddr(x.addr))}</td><td>${esc(x.layout)}</td><td>${esc(x.floor||'')}</td><td class="numeric">${one(x.deed)}</td><td class="numeric">${x.park?n(x.park):'—'}</td><td class="numeric">${one(x.unit)}</td><td class="numeric">${n(x.total)}</td><td>${extra}</td></tr>`;
-      }).join('');
-      const growth = s.growth!=null?`<span style="color:${s.growth>0?'#c0392b':'#3f7d68'}">${s.growth>0?'+':''}${s.growth}%</span>`:'—';
+      const s = det.summary;
+      const presaleEv = det.presale.map(r => ({...r, ev: r.term ? 'presale_termination' : 'presale_contract', kindLabel: r.term ? '預售解約' : '預售簽約'}));
+      const completedEv = det.resale.map(r => ({...r, ev: r.flag==='交屋'?'first_registration':r.flag==='轉售'?'resale_transfer':r.flag==='換約'?'contract_assignment':'unknown_completed', kindLabel: r.flag==='交屋'?'首次移轉·疑似交屋':r.flag==='轉售'?'中古轉售':r.flag==='換約'?'換約':'成屋登錄'}));
+      const nSign = presaleEv.filter(x=>x.ev==='presale_contract').length, nTerm = presaleEv.filter(x=>x.ev==='presale_termination').length;
+      const nFirst = completedEv.filter(x=>x.ev==='first_registration').length, nResale = completedEv.filter(x=>x.ev==='resale_transfer').length;
+      const hasPre = det.presale.length > 0, hasCom = det.resale.length > 0;
+      let view = state.projectView || (hasPre ? 'presale' : 'completed');
+      if (view==='presale' && !hasPre) view='completed';
+      if (view==='completed' && !hasCom) view='presale';
+      const rows = view==='presale' ? presaleEv : completedEv;
+      const chipDefs = view==='presale'
+        ? [['all','全部'],['presale_contract','有效簽約'],['presale_termination','解約']]
+        : [['all','全部'],['first_registration','首次移轉·疑似交屋'],['resale_transfer','中古轉售'],['contract_assignment','換約'],['unknown_completed','未分類']];
+      const chip = chipDefs.some(c=>c[0]===state.projectChip) ? state.projectChip : 'all';
+      const filtered = (chip==='all' ? rows : rows.filter(x=>x.ev===chip)).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+      const total = filtered.length, limit = state.projectRows || 50, shown = filtered.slice(0, limit);
+      const body = shown.map(projRow).join('');
+      const growth = s.growth!=null ? `<span style="color:${s.growth>0?'#c0392b':'#3f7d68'}">${s.growth>0?'+':''}${s.growth}%</span>` : '—';
+      const tabs = `<div class="proj-tabs" role="tablist">
+        <button class="proj-tab ${view==='presale'?'is-active':''}" role="tab" aria-selected="${view==='presale'}" data-pv="presale" ${!hasPre?'disabled':''}>預售簽約（${det.presale.length}）</button>
+        <button class="proj-tab ${view==='completed'?'is-active':''}" role="tab" aria-selected="${view==='completed'}" data-pv="completed" ${!hasCom?'disabled':''}>交屋後實登（${det.resale.length}）</button></div>`;
+      const chips = `<div class="proj-chips">${chipDefs.map(c=>{const cn=c[0]==='all'?rows.length:rows.filter(x=>x.ev===c[0]).length;return `<button class="proj-chip ${chip===c[0]?'is-active':''}" data-pc="${c[0]}">${c[1]}（${cn}）</button>`;}).join('')}</div>`;
+      const more = total>limit ? `<div class="load-more-wrap"><button class="load-more" id="loadMore">載入更多（已顯示 ${shown.length}／${total}）</button></div>` : `<p class="tx-note">共 ${total} 筆</p>`;
       $('#projectView').innerHTML = `<button class="district-back" type="button" id="backToDistrict">← 返回${state.district||'全市'}</button>
-        <div class="district-title-row"><div><p class="section-kicker">Project Dossier / ${det.district}</p><h1>${esc(det.name)}</h1>${(det.source_names&&det.source_names.length)?`<p style="font-size:12px;color:#8a836f;margin-top:4px">實登原始登錄名：${det.source_names.map(esc).join('、')}（已依建商正式字形校正）</p>`:''}</div><p>${det.district}・完整實價登錄生命週期：預售簽約 → 交屋過戶 → 換約 → 中古轉售。含貝多即時查詢網補件，交屋回補與真中古轉售分開標示。</p></div>
+        <div class="district-title-row"><div><p class="section-kicker">Project Dossier / ${det.district}</p><h1>${esc(det.name)}</h1>${(det.source_names&&det.source_names.length)?`<p style="font-size:12px;color:#8a836f;margin-top:4px">實登原始登錄名：${det.source_names.map(esc).join('、')}（已依建商正式字形校正）</p>`:''}</div><p>${det.district}・分開呈現「預售簽約」與「交屋後實登」——同一戶的預售與日後首次移轉是不同官方事件，不相加成「成交總數」。</p></div>
         <section class="section"><div class="kpi-grid">
-          ${kpi('預售簽約', n(s.presale_n), '筆', s.presale_med?`均 ${one(s.presale_med)} 萬／坪`:'')}
-          ${kpi('交屋過戶', n(s.hand_n), '筆', '同批戶完工登記')}
-          ${kpi('中古轉售', n(s.resold_n), '筆', s.resale_med?`均 ${one(s.resale_med)} 萬／坪`:'')}
-          ${kpi('預售→轉售', growth, '', `${s.huan_n} 換約・涵蓋 ${s.addr_count} 門牌`)}
+          ${kpi('有效預售簽約', n(nSign), '筆', s.presale_med?`均 ${one(s.presale_med)} 萬／坪`:'')}
+          ${kpi('預售解約', n(nTerm), '筆', '撤銷／解約')}
+          ${kpi('首次移轉·疑似交屋', n(nFirst), '筆', '非等於建商正式交屋')}
+          ${kpi('中古轉售', n(nResale), '筆', s.resale_med?`均 ${one(s.resale_med)} 萬／坪・對前手 ${growth}`:'')}
         </div></section>
-        <section class="section"><div class="section-heading-row"><div><p class="section-kicker">Lifecycle</p><h2>全案歷次登錄（${all.length}）</h2></div><p class="section-deck">預售簽約與交屋過戶多為同批戶的兩次登記；真正二手看「中古轉售」，並附同一門牌前手漲跌。</p></div><div class="data-panel"><div class="transaction-wrap"><table class="transactions"><thead><tr><th>記號</th><th>成交日</th><th>門牌</th><th>格局</th><th>樓層</th><th style="text-align:right">權狀坪</th><th style="text-align:right">車位萬</th><th style="text-align:right">萬／坪</th><th style="text-align:right">總價萬</th><th>轉售對前手</th></tr></thead><tbody>${body}</tbody></table></div></div></section>`;
+        <section class="section"><div class="section-heading-row"><div><p class="section-kicker">Lifecycle</p><h2>逐筆登錄</h2></div><p class="section-deck">兩大頁籤互斥：預售簽約看新約；交屋後實登看首次移轉與真中古轉售（附前手漲跌）。「首次移轉／疑似交屋」不等於建商正式交屋。</p></div>
+          ${tabs}${chips}
+          <div class="data-panel"><div class="transaction-wrap"><table class="transactions"><thead><tr><th>記號</th><th>成交日</th><th>門牌</th><th>格局</th><th>樓層</th><th style="text-align:right">權狀坪</th><th style="text-align:right">車位萬</th><th style="text-align:right">萬／坪</th><th style="text-align:right">總價萬</th><th>轉售對前手</th></tr></thead><tbody>${body}</tbody></table></div>${more}</div></section>`;
       $('#backToDistrict')?.addEventListener('click', () => navigate({project:null}));
+      $$('[data-pv]').forEach(b => b.addEventListener('click', () => { if (!b.disabled) navigate({projectView:b.dataset.pv, projectChip:'all', projectRows:50}); }));
+      $$('[data-pc]').forEach(b => b.addEventListener('click', () => { state.projectChip = b.dataset.pc; state.projectRows = 50; renderProject(); }));
+      $('#loadMore')?.addEventListener('click', () => { state.projectRows = (state.projectRows||50) + 100; renderProject(); });
     }
 
     function renderDistrict() {
@@ -983,18 +1022,21 @@
       url.searchParams.set('month', state.month);
       if (state.district) url.searchParams.set('district', state.district); else url.searchParams.delete('district');
       if (state.project) url.searchParams.set('project', state.project); else url.searchParams.delete('project');
+      if (state.project && state.projectView) url.searchParams.set('pv', state.projectView); else url.searchParams.delete('pv');
       if (state.cityTab && state.cityTab !== 'rank') url.searchParams.set('tab', state.cityTab); else url.searchParams.delete('tab');
       if (state.range && state.range !== 24) url.searchParams.set('range', state.range); else url.searchParams.delete('range');
       (replace ? history.replaceState : history.pushState).call(history, {...state}, '', url);
     }
 
     async function navigate(patch, replace = false) {
+      if ('project' in patch) { state.projectView = ''; state.projectChip = 'all'; state.projectRows = 50; }
       Object.assign(state, patch);
       if (!marketMeta().available_months.includes(state.month)) state.month = marketMeta().complete_month;
       updateUrl(replace);
       await ensureSnapshot();
       render();
       if (patch.district !== undefined) document.querySelector('#main').scrollIntoView({behavior:'smooth',block:'start'});
+      if ('project' in patch && patch.project) window.scrollTo({top:0,behavior:'smooth'});   // 點入建案從頂部開始
     }
 
     function render() {
@@ -1048,6 +1090,7 @@
       state.district = DATA.meta.districts.includes(district) ? district : '';
       const project = params.get('project');
       state.project = project ? (REDIRECT[project] || project) : null;   // 舊流水PID → 新穩定ID 轉址
+      const pv = params.get('pv'); state.projectView = ['presale','completed'].includes(pv) ? pv : '';
       const tab = params.get('tab');
       state.cityTab = ['rank','grid','map','tx'].includes(tab) ? tab : 'rank';
       const range = Number(params.get('range'));
