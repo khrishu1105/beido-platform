@@ -646,7 +646,7 @@
 
     function lineChart(series, label) {
       if (!series.length) return `<div class="empty-state"><strong>尚無趨勢資料</strong>請改選其他月份。</div>`;
-      const width = 920, height = 340, left = 58, right = 52, top = 30, bottom = 56;
+      const width = 920, height = 340, left = 58, right = 64, top = 30, bottom = 56;
       const innerW = width - left - right, innerH = height - top - bottom;
       const prices = series.map(item => item.median_unit_price).filter(value => value != null);
       const volumes = series.map(item => item.sample_count || 0);
@@ -666,6 +666,11 @@
         const price = maxPrice - fraction * (maxPrice - minPrice);
         return `<line class="chart-grid-line" x1="${left}" x2="${width-right}" y1="${y}" y2="${y}"/><text class="chart-axis-label" x="${left-10}" y="${y+3}" text-anchor="end">${price.toFixed(0)}</text>`;
       }).join('');
+      const volTicks = [0, .5, 1].map(fraction => {
+        const vol = Math.round(maxVolume * fraction);
+        const y = yVolume(vol);
+        return `<text class="chart-axis-label" x="${width-right+9}" y="${y+3}" text-anchor="start">${n(vol)}</text>`;
+      }).join('');
       const bars = series.map((item, index) => {
         const y = yVolume(item.sample_count || 0);
         const incomplete = monthStatus(item.month) === 'backfill' ? ' incomplete' : '';
@@ -678,7 +683,7 @@
       const selectedX = x(series.length - 1);
       const rows = series.map(item => `<tr><td>${item.month}</td><td>${n(item.sample_count)}</td><td>${one(item.median_unit_price)}</td><td>${n(item.median_total_price)}</td></tr>`).join('');
       return `<svg class="chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(label)}的成交量與單價趨勢圖">
-        ${grid}<text class="chart-axis-label" x="18" y="${top}" transform="rotate(-90 18 ${top})">萬／坪</text>
+        ${grid}${volTicks}<text class="chart-axis-label" x="18" y="${top}" transform="rotate(-90 18 ${top})">萬／坪</text><text class="chart-axis-label" x="${width-14}" y="${top}" transform="rotate(-90 ${width-14} ${top})">件數</text>
         ${bars}<line class="chart-selected-line" x1="${selectedX}" x2="${selectedX}" y1="${top}" y2="${top+innerH}"/>
         <path class="chart-line" d="${line}"/>${dots}${labels}
       </svg><div class="chart-legend"><span class="legend-key">單價中位數</span><span class="legend-key volume">成交件數</span><span>虛線柱＝資料回補中</span></div>
