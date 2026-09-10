@@ -600,6 +600,10 @@
     function kpi(label, value, unit, meta) {
       return `<article class="kpi"><div class="kpi-label">${label}</div><div class="kpi-value">${value}<small>${unit}</small></div><div class="kpi-meta">${meta}</div></article>`;
     }
+    // 非完整月份不顯示可能誤導的月增/年增，改中性說明
+    function changeOrHold(value, label) {
+      return isIncomplete() ? `<span class="change flat">資料未完整，暫不比較</span>` : changeMarkup(value, label);
+    }
 
     function snapKey() { return state.market + '|' + state.month; }
     function emptyCity() { return {city:{sample_count:0, median_unit_price:null, median_total_price:null, district_ranking:[], trailing_12:null, trailing_24:null, trailing_36:null}, districts:{}}; }
@@ -615,24 +619,27 @@
 
     function marketLabel() { return DATA.markets[state.market].label; }
     function marketMeta() { return DATA.markets[state.market].meta || DATA.meta; }
+    // 月份狀態改用 coverage 六種 enum：complete / local_source_gap / official_pending / mixed / backfilling / unpublished
     function monthStatus(value = state.month) {
-      const meta = marketMeta();
-      if ((meta.coverage_gap_months || []).includes(value)) return 'gap';
-      if ((meta.not_published_months || []).includes(value)) return 'unpublished';
-      if ((meta.backfill_months || meta.incomplete_months || []).includes(value)) return 'backfill';
+      const ms = marketMeta().month_status;
+      if (ms && ms[value]) return ms[value];
+      const meta = marketMeta();   // 後備(舊資料格式)
+      if ((meta.coverage_gap_months || meta.incomplete_months || []).includes(value)) return 'local_source_gap';
+      if ((meta.not_published_months || []).includes(value)) return 'official_pending';
       return 'complete';
     }
     function isIncomplete(value = state.month) { return monthStatus(value) !== 'complete'; }
-    function isUnavailable(value = state.month) { return ['gap','unpublished'].includes(monthStatus(value)); }
-    function sampleDisplay(value) { return isUnavailable() ? '—' : n(value); }
+    function isUnavailable(value = state.month) { return ['official_pending','unpublished'].includes(monthStatus(value)); }
+    function sampleDisplay(value) { return (isUnavailable() || !value) ? '—' : n(value); }
     function statusLabel(value = state.month) {
-      return ({complete:'完整月份',backfill:'資料回補中',gap:'來源缺口',unpublished:'尚未發布'})[monthStatus(value)];
+      return ({complete:'資料已覆蓋', local_source_gap:'本站來源缺口', official_pending:'官方陸續登錄中', mixed:'部分缺口·部分待發布', backfilling:'正在回補', unpublished:'尚未發布'})[monthStatus(value)] || '資料已覆蓋';
     }
     function statusSentence() {
       const status = monthStatus();
-      if (status === 'gap') return '<span class="status-gap">本月位於既有批次缺口，0 筆不代表沒有成交，暫不可判讀</span>';
-      if (status === 'unpublished') return '<span class="status-gap">官方目前尚未發布這個市場的本月交易資料</span>';
-      if (status === 'backfill') return '<span class="status-live">本月資料回補中，成交量不可直接與完整月份相比</span>';
+      if (status === 'local_source_gap') return '<span class="status-gap">本月官方已可查，但本站尚未回補這段來源，數字不完整、暫不與完整月份比較</span>';
+      if (status === 'official_pending') return '<span class="status-gap">官方依每旬時程陸續登錄中，本月尚未完整發布，0 筆不代表沒有成交</span>';
+      if (status === 'mixed') return '<span class="status-gap">本月部分窗口本站缺口、部分官方尚未發布，數字不完整</span>';
+      if (status === 'backfilling') return '<span class="status-live">本月來源正在回補中，暫不與完整月份相比</span>';
       return '本月為完整登錄觀察期';
     }
 
@@ -677,7 +684,7 @@
       }).join('');
       const bars = series.map((item, index) => {
         const y = yVolume(item.sample_count || 0);
-        const incomplete = monthStatus(item.month) === 'backfill' ? ' incomplete' : '';
+        const incomplete = monthStatus(item.month) !== 'complete' ? ' incomplete' : '';
         return `<rect class="chart-volume${incomplete}" x="${x(index)-barWidth/2}" y="${y}" width="${barWidth}" height="${volBottom-y}"><title>${item.month}｜${item.sample_count} 件</title></rect>`;
       }).join('');
       const dots = points.map(point => `<circle class="chart-point${point[2].month===state.month?' selected':''}" cx="${point[0]}" cy="${point[1]}" r="${point[2].month===state.month?5:3}"><title>${point[2].month}｜${one(point[2].median_unit_price)} 萬/坪</title></circle>`).join('');
@@ -700,8 +707,9 @@
     }
 
     function cityInsight(city) {
-      if (monthStatus() === 'gap') return `${monthLabel(state.month)}落在尚未保存到的官方每旬批次；畫面保留月份位置，但不把空資料解讀為零成交。`;
-      if (monthStatus() === 'unpublished') return `${marketLabel()}目前最新交易月份為 ${monthLabel(marketMeta().latest_month)}；${monthLabel(state.month)}尚無官方發布資料。`;
+      if (monthStatus() === 'local_source_gap') return `${monthLabel(state.month)}官方已可查詢，但本站尚未回補這段來源批次；畫面保留月份位置，但不把不完整資料當成完整量能。`;
+      if (monthStatus() === 'official_pending' || monthStatus() === 'unpublished') return `${marketLabel()}官方依每旬時程陸續登錄；${monthLabel(state.month)}尚未完整發布，0 筆不可解讀為沒有成交。`;
+      if (monthStatus() === 'mixed') return `${monthLabel(state.month)}部分窗口本站缺口、部分官方尚未發布，本月數字僅供參考、不與完整月份比較。`;
       const ranking = city.district_ranking || [];
       if (!ranking.length) return '這個月份尚無足夠的行政區成交樣本。';
       const top = ranking[0];
@@ -763,8 +771,8 @@
         <section class="section" aria-labelledby="cityTitle">
           <div class="section-heading-row"><div><p class="section-kicker">Market Snapshot / ${state.month}</p><h2 id="cityTitle">桃園市成交快照</h2></div><p class="section-deck">${incompleteText}。單價採去車位後的中位數，避免少數極端交易扭曲市場中心。</p></div>
           <div class="kpi-grid">
-            ${kpi('成交單價中位數', one(city.median_unit_price), '萬／坪', changeMarkup(city.year_over_year,'較去年同期'))}
-            ${kpi(isIncomplete()?'目前資料筆數':'本月成交件數', sampleDisplay(city.sample_count), isUnavailable()?'':'件', isUnavailable()?'不可解讀為零成交':changeMarkup(city.month_over_month,'單價較上月'))}
+            ${kpi('成交單價中位數', one(city.median_unit_price), '萬／坪', changeOrHold(city.year_over_year,'較去年同期'))}
+            ${kpi(isIncomplete()?'目前資料筆數':'本月成交件數', sampleDisplay(city.sample_count), isUnavailable()?'':'件', isUnavailable()?'不可解讀為零成交':changeOrHold(city.month_over_month,'單價較上月'))}
             ${kpi('成交總價中位數', n(city.median_total_price), '萬元', `樣本 ${n(city.sample_count)} 件`)}
             ${kpi('近 12 月樣本', n((city.trailing_12||{}).sample_count), '件', `全市行情基礎`)}
           </div>
@@ -901,8 +909,8 @@
           <button type="button" class="dc-share" id="shareDistrict">分享本區 →</button>
         </div>
         <section class="section" aria-label="${district}成交快照"><div class="kpi-grid">
-          ${kpi('本月單價中位數', one(snapshot.median_unit_price), '萬／坪', changeMarkup(snapshot.year_over_year,'較去年同期'))}
-          ${kpi(isIncomplete()?'目前資料筆數':'本月成交件數', sampleDisplay(snapshot.sample_count), isUnavailable()?'':'件', isUnavailable()?'不可解讀為零成交':changeMarkup(snapshot.month_over_month,'單價較上月'))}
+          ${kpi('本月單價中位數', one(snapshot.median_unit_price), '萬／坪', changeOrHold(snapshot.year_over_year,'較去年同期'))}
+          ${kpi(isIncomplete()?'目前資料筆數':'本月成交件數', sampleDisplay(snapshot.sample_count), isUnavailable()?'':'件', isUnavailable()?'不可解讀為零成交':changeOrHold(snapshot.month_over_month,'單價較上月'))}
           ${kpi('本月總價中位數', n(snapshot.median_total_price), '萬元', `樣本 ${n(snapshot.sample_count)} 件`)}
           ${kpi(`近 ${state.range} 月成交`, n((snapshot['trailing_'+state.range]||{}).sample_count), '件', `占全市 ${one((snapshot['trailing_'+state.range]||{}).share_of_city)}%`)}
         </div></section>
@@ -937,10 +945,11 @@
       const snapshot = state.district ? getSnapshot().districts[state.district] : getSnapshot().city;
       $('#heroMonth').textContent = monthLabel(state.month);
       const status = monthStatus();
-      $('#heroStatus').innerHTML = status === 'complete' ? '● 完整月份・可比較量能'
-        : status === 'backfill' ? '<span class="status-live">● 資料回補中</span>・數量尚未完整'
-        : status === 'gap' ? '<span class="status-gap">● 來源缺口</span>・不可判讀為零成交'
-        : '<span class="status-gap">● 尚未發布</span>・等待官方批次';
+      $('#heroStatus').innerHTML = status === 'complete' ? '● 資料已覆蓋・可比較量能'
+        : status === 'local_source_gap' ? '<span class="status-gap">● 本站來源缺口</span>・資料不完整'
+        : status === 'mixed' ? '<span class="status-gap">● 部分缺口·部分待發布</span>・不完整'
+        : status === 'backfilling' ? '<span class="status-live">● 正在回補</span>・數量尚未完整'
+        : '<span class="status-gap">● 官方陸續登錄中</span>・不可判讀為零成交';
       $('#heroMarket').textContent = marketLabel();
       $('#heroScope').textContent = state.district || '桃園市';
       $('#heroSamples').textContent = isUnavailable() ? '—' : `${n(snapshot.sample_count)} 件`;
@@ -961,7 +970,7 @@
       $('#yearSelect').value = curYear;
       const ymonths = avail.filter(m => m.slice(0,4) === curYear).sort().reverse();
       $('#monthSelect').innerHTML = ymonths.map(value => {
-        const suffix = ({backfill:'（登錄中）',gap:'（缺口）',unpublished:'（未發布）'})[monthStatus(value)] || '';
+        const suffix = ({local_source_gap:'（本站缺口）', official_pending:'（官方登錄中）', mixed:'（部分缺口）', backfilling:'（回補中）', unpublished:'（未發布）'})[monthStatus(value)] || '';
         return `<option value="${value}">${Number(value.slice(5))} 月${suffix}</option>`;
       }).join('');
       $('#monthSelect').value = state.month;
