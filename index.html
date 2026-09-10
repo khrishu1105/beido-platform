@@ -646,35 +646,39 @@
 
     function lineChart(series, label) {
       if (!series.length) return `<div class="empty-state"><strong>尚無趨勢資料</strong>請改選其他月份。</div>`;
-      const width = 920, height = 340, left = 58, right = 64, top = 30, bottom = 56;
+      const width = 920, height = 340, left = 58, right = 64, top = 28, bottom = 56;
       const innerW = width - left - right, innerH = height - top - bottom;
       const prices = series.map(item => item.median_unit_price).filter(value => value != null);
       const volumes = series.map(item => item.sample_count || 0);
       if (!prices.length) return `<div class="empty-state"><strong>這段期間沒有足夠的單價樣本</strong>仍可切換其他月份或返回全市。</div>`;
       const minPrice = Math.floor((Math.min(...prices) - 2) / 5) * 5;
       const maxPrice = Math.ceil((Math.max(...prices) + 2) / 5) * 5 || minPrice + 5;
-      const maxVolume = Math.max(...volumes, 1);
+      // 上半價格區、下半件數區，各自的格線對齊各自座標軸數值
+      const priceH = innerH * 0.58;
+      const volBottom = top + innerH, volTop = top + innerH * 0.70, volH = volBottom - volTop;
+      const niceCeil = x => { if (x <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(x))); const r = x / p; const s = r <= 1 ? 1 : r <= 2 ? 2 : r <= 2.5 ? 2.5 : r <= 5 ? 5 : 10; return s * p; };
+      const volMax = niceCeil(Math.max(...volumes, 1));
       const step = series.length > 1 ? innerW / (series.length - 1) : innerW;
       const x = index => left + (series.length > 1 ? index * step : innerW / 2);
-      const yPrice = value => top + (maxPrice - value) / Math.max(1, maxPrice - minPrice) * innerH * .72;
-      const yVolume = value => top + innerH - value / maxVolume * innerH * .36;
+      const yPrice = value => top + (maxPrice - value) / Math.max(1, maxPrice - minPrice) * priceH;
+      const yVolume = value => volBottom - value / volMax * volH;
       const barWidth = Math.max(5, Math.min(24, innerW / Math.max(series.length, 1) * .55));
       const points = series.map((item, index) => item.median_unit_price == null ? null : [x(index), yPrice(item.median_unit_price), item]).filter(Boolean);
       const line = points.map((point, index) => `${index ? 'L' : 'M'}${point[0].toFixed(1)},${point[1].toFixed(1)}`).join(' ');
       const grid = [0, .25, .5, .75, 1].map(fraction => {
-        const y = top + fraction * innerH * .72;
+        const y = top + fraction * priceH;
         const price = maxPrice - fraction * (maxPrice - minPrice);
         return `<line class="chart-grid-line" x1="${left}" x2="${width-right}" y1="${y}" y2="${y}"/><text class="chart-axis-label" x="${left-10}" y="${y+3}" text-anchor="end">${price.toFixed(0)}</text>`;
       }).join('');
-      const volTicks = [0, .5, 1].map(fraction => {
-        const vol = Math.round(maxVolume * fraction);
+      const volGrid = [0, .5, 1].map(fraction => {
+        const vol = volMax * fraction;
         const y = yVolume(vol);
-        return `<text class="chart-axis-label" x="${width-right+9}" y="${y+3}" text-anchor="start">${n(vol)}</text>`;
+        return `<line class="chart-grid-line" x1="${left}" x2="${width-right}" y1="${y}" y2="${y}"/><text class="chart-axis-label" x="${width-right+9}" y="${y+3}" text-anchor="start">${n(vol)}</text>`;
       }).join('');
       const bars = series.map((item, index) => {
         const y = yVolume(item.sample_count || 0);
         const incomplete = monthStatus(item.month) === 'backfill' ? ' incomplete' : '';
-        return `<rect class="chart-volume${incomplete}" x="${x(index)-barWidth/2}" y="${y}" width="${barWidth}" height="${top+innerH-y}"><title>${item.month}｜${item.sample_count} 件</title></rect>`;
+        return `<rect class="chart-volume${incomplete}" x="${x(index)-barWidth/2}" y="${y}" width="${barWidth}" height="${volBottom-y}"><title>${item.month}｜${item.sample_count} 件</title></rect>`;
       }).join('');
       const dots = points.map(point => `<circle class="chart-point${point[2].month===state.month?' selected':''}" cx="${point[0]}" cy="${point[1]}" r="${point[2].month===state.month?5:3}"><title>${point[2].month}｜${one(point[2].median_unit_price)} 萬/坪</title></circle>`).join('');
       const labelEvery = series.length <= 12 ? 1 : series.length <= 24 ? 3 : 4;
@@ -683,8 +687,8 @@
       const selectedX = x(series.length - 1);
       const rows = series.map(item => `<tr><td>${item.month}</td><td>${n(item.sample_count)}</td><td>${one(item.median_unit_price)}</td><td>${n(item.median_total_price)}</td></tr>`).join('');
       return `<svg class="chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(label)}的成交量與單價趨勢圖">
-        ${grid}${volTicks}<text class="chart-axis-label" x="18" y="${top}" transform="rotate(-90 18 ${top})">萬／坪</text><text class="chart-axis-label" x="${width-14}" y="${top}" transform="rotate(-90 ${width-14} ${top})">件數</text>
-        ${bars}<line class="chart-selected-line" x1="${selectedX}" x2="${selectedX}" y1="${top}" y2="${top+innerH}"/>
+        ${grid}${volGrid}<text class="chart-axis-label" x="18" y="${top+priceH/2}" transform="rotate(-90 18 ${top+priceH/2})">萬／坪</text><text class="chart-axis-label" x="${width-13}" y="${(volTop+volBottom)/2}" transform="rotate(-90 ${width-13} ${(volTop+volBottom)/2})">件數</text>
+        ${bars}<line class="chart-selected-line" x1="${selectedX}" x2="${selectedX}" y1="${top}" y2="${volBottom}"/>
         <path class="chart-line" d="${line}"/>${dots}${labels}
       </svg><div class="chart-legend"><span class="legend-key">單價中位數</span><span class="legend-key volume">成交件數</span><span>虛線柱＝資料回補中</span></div>
       <details class="chart-table"><summary>查看圖表數據表</summary><table><thead><tr><th>月份</th><th>成交件數</th><th>中位單價</th><th>中位總價</th></tr></thead><tbody>${rows}</tbody></table></details>`;
