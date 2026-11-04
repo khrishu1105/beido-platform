@@ -4,3 +4,6 @@ exclude:
   - "完成報告.md"
   - project_aliases.json
   - report-assets
+  - refs
+  - project/_tools
+  - data/projects/_tools

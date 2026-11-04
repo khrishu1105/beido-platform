@@ -3,3 +3,5 @@ Allow: /
 Disallow: /tools/
 
 Sitemap: https://beedoo.com.tw/sitemap.xml
+Sitemap: https://beedoo.com.tw/project/sitemap-projects-b.xml
+Sitemap: https://beedoo.com.tw/project/sitemap-projects-c.xml
