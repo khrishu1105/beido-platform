@@ -216,7 +216,7 @@ function lineChart(series, label, metric = state.metric, desc = '') {
   const autoDesc = `${series[0].month} 至 ${series[series.length-1].month} 共 ${series.length} 個月，${metric==='total'?'總價':'單價'}中位數介於 ${valFmt(lo)}～${valFmt(hi)} ${unit}${latest ? `，最新 ${latest.month} 為 ${valFmt(latest[key])} ${unit}` : ''}；完整數值見下方數據表。`;
   return `<svg class="chart-svg${compact?' compact':''}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="chartTitle chartDesc">
     <title id="chartTitle">${esc(label)}的成交量與${metric==='total'?'總價':'單價'}趨勢圖</title><desc id="chartDesc">${esc(desc ? desc + autoDesc : autoDesc)}</desc>
-    ${grid}${volGrid}<text class="chart-axis-label" x="18" y="${top+priceH/2}" transform="rotate(-90 18 ${top+priceH/2})">${unit}</text><text class="chart-axis-label" x="${width-13}" y="${(volTop+volBottom)/2}" transform="rotate(-90 ${width-13} ${(volTop+volBottom)/2})">件數</text>
+    ${grid}${volGrid}${compact ? `<text class="chart-axis-label" x="${left-10}" y="${top-12}" text-anchor="end">${unit}</text><text class="chart-axis-label" x="${width-right+9}" y="${volTop-8}" text-anchor="start">件</text>` : `<text class="chart-axis-label" x="18" y="${top+priceH/2}" transform="rotate(-90 18 ${top+priceH/2})">${unit}</text><text class="chart-axis-label" x="${width-13}" y="${(volTop+volBottom)/2}" transform="rotate(-90 ${width-13} ${(volTop+volBottom)/2})">件數</text>`}
     ${bars}<line class="chart-selected-line" x1="${selectedX}" x2="${selectedX}" y1="${top}" y2="${volBottom}"/>
     <path class="chart-line" d="${line}"/>${dots}${labels}
   </svg><div class="chart-legend"><span class="legend-key">${metric==='total'?'總價':'單價'}中位數（左軸）</span><span class="legend-key volume">成交件數（右軸）</span><span>虛線柱＝資料回補中</span></div>

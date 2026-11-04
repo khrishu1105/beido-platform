@@ -739,3 +739,4 @@ body[data-view="district"] .content, body[data-view="project"] .content { paddin
   .tx-table.m-cards-table td.c-head { order: -1; }
   .prototype-badge { position: static; display: block; width: fit-content; margin: 0 auto; }
 }
+@media (max-width: 680px) { .cross-table tr.is-current td { background: transparent; } }
