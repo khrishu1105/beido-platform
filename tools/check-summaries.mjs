@@ -44,6 +44,15 @@ for (const market of MARKETS) {
     }
   }
 }
+// WP7：預售建案清單不可出現同案異名（字形/空白/大小寫/「建設」正規化後重複）
+const GLYPH = { '悦': '悅', '鋭': '銳', '画': '畫', '双': '雙', '滙': '匯', '絵': '繪', '臺': '台' };
+const normName = x => x.normalize('NFKC').replace(/[悦鋭画双滙絵臺]/g, c => GLYPH[c]).replace(/\s+/g, '').replace(/建設/g, '').toLowerCase();
+let dupChecks = 0;
+for (const d of DISTRICTS) for (const window of WINDOWS) for (const month of ['2024-04', '2025-04', data.markets.presale.meta.complete_month]) {
+  const list = Summary.aggregateProjects(presale[d], month, window); dupChecks++;
+  const seen = new Map();
+  for (const p of list) { const k = normName(p.name); if (seen.has(k)) fail(`dup project name ${d} ${month} ${window}: ${seen.get(k)} / ${p.name}`); seen.set(k, p.name); }
+}
 // 靜態檔與即時計算一致
 const idx = readJSON('data/summaries/index.json');
 for (const f of idx.files) {
@@ -54,5 +63,5 @@ for (const f of idx.files) {
     presaleFile: district ? presale[district] : undefined, population: district ? population : undefined }));
   if (out.text !== j.text) fail(`static mismatch ${f.file}`);
 }
-console.log(`summary runs=${runs} static=${idx.files.length} fails=${fails} backfill-warnings=${warns}`);
+console.log(`summary runs=${runs} static=${idx.files.length} dup-name-checks=${dupChecks} fails=${fails} backfill-warnings=${warns}`);
 process.exit(fails ? 1 : 0);

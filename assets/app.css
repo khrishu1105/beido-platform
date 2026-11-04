@@ -693,3 +693,8 @@ body[data-view="district"] .content, body[data-view="project"] .content { paddin
   .presale-table td.num, .presale-table th.num { white-space: normal; font-size: 11.5px; }
   .proj-link { word-break: break-all; }
 }
+@media (max-width: 1000px) and (min-width: 681px) {
+  .tx-cards { min-width: 0; }
+  .tx-cards th, .tx-cards td { padding: 14px 10px; }
+  .tx-cards .address { max-width: 200px; }
+}

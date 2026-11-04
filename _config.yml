@@ -3,3 +3,4 @@ exclude:
   - tools
   - "完成報告.md"
   - project_aliases.json
+  - report-assets
