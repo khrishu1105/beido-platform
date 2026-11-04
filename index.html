@@ -18,13 +18,14 @@
   <!--SEO:END-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&display=swap"></noscript>
   <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
   <a class="skip-link" href="#main">跳至主要內容</a>
 
-  <div class="intro" id="brandIntro" aria-hidden="true">
+  <div class="intro" id="brandIntro" aria-hidden="true" role="presentation">
     <div class="intro-inner">
       <svg class="intro-mark" viewBox="230 365 620 620" role="img" aria-label="貝多不動產標誌組裝動畫">
         <path class="logo-piece logo-main" fill="#EEECE7" d="M834.96,786.76 664.06,616.67 577.96,616.29 577.96,380.1 504.72,379.79 406.11,380.2 245.52,380.2 245.52,459.26 504.78,459.26 504.9,615.76 245.52,616.53 245.52,969.23 332.74,969.23 332.74,684.65 541.15,684.52 621.19,684.85 750.58,817.01 750.28,905.73 422.81,905.73 422.81,969.23 834.96,969.23 Z"/>
@@ -130,10 +131,10 @@
     <div class="footer-inner"><span class="footer-brand">貝多不動產</span><span>資料僅供市場研究，不構成個別物件估價或投資建議。</span><span>OPERATION PROTOTYPE · 2026</span></div>
   </footer>
   <div class="prototype-badge">操作原型</div>
-  <div id="liveRegion" class="skip-link" aria-live="polite" aria-atomic="true"></div>
+  <div id="liveRegion" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
   <!--BOOT:BEGIN--><!--BOOT:END-->
-  <script src="assets/summary.js"></script>
-  <script src="assets/app.js"></script>
+  <script src="assets/summary.js" defer></script>
+  <script src="assets/app.js" defer></script>
 </body>
 </html>

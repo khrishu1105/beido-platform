@@ -43,7 +43,7 @@ for (const [file, url] of pages) {
   const fq = byType('FAQPage');
   if (!fq || !(fq.mainEntity || []).length) fail(file, 'FAQPage');
   else {
-    const visible = decode((html.match(/<noscript>[\s\S]*?<\/noscript>/) || [''])[0]);
+    const visible = decode((html.match(/<noscript><section class="ssr">[\s\S]*?<\/noscript>/) || [''])[0]);
     for (const q of fq.mainEntity) {
       if (q['@type'] !== 'Question' || !q.name || !q.acceptedAnswer || q.acceptedAnswer['@type'] !== 'Answer' || !q.acceptedAnswer.text) fail(file, 'FAQ shape');
       if (/NaN|undefined|null|待確認/.test(q.acceptedAnswer.text)) fail(file, `bad FAQ text: ${q.name}`);

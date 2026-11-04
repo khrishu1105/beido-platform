@@ -9,6 +9,7 @@ const population = readJSON('data/population.json');
 const presale = Object.fromEntries(DISTRICTS.map(d => [d, readJSON(`data/presale_projects/${SLUGS[d]}.json`)]));
 const BAD = /NaN|undefined|null|Infinity|待確認|\[object/;
 let runs = 0, fails = 0, warns = 0;
+const edge = { full: 0, short: 0, tiny: 0 };
 const fail = (msg) => { fails++; if (fails < 30) console.error('FAIL', msg); };
 
 for (const market of MARKETS) {
@@ -22,10 +23,21 @@ for (const market of MARKETS) {
       const out = Summary.build(ctx); runs++;
       const all = out.text + Object.values(out.notes).join('');
       if (BAD.test(all)) fail(`${market} ${month} ${district} ${window}: ${all}`);
+      // 邊界句型：不可空句、重複、零漲幅、矛盾方向
+      const tag = `${market} ${month} ${district || '全市'} ${window}`;
+      for (const x of out.sentences) if (x.length < 8 || !x.endsWith('。') || /（）|以為主|，。|；。/.test(x)) fail(`empty/broken sentence ${tag}: ${x}`);
+      for (const x of Object.values(out.notes)) if (x.length < 8 || !x.endsWith('。') || /（）|，。|；。/.test(x)) fail(`broken note ${tag}: ${x}`);
+      if (new Set(out.sentences).size !== out.sentences.length) fail(`duplicate sentence ${tag}`);
+      if (/(上漲|下跌|坪高|坪低|高於|低於)[^0-9]{0,6}0\.0%|低出/.test(all)) fail(`zero-change wording ${tag}: ${all}`);
+      const v = out.figures.versus_city;
+      if (v != null && v !== 0 && !(v > 0 ? /坪高 |高於/ : /坪低 |低於/).test(out.text + out.notes.overview)) fail(`vs-city direction ${tag}`);
+      if (v != null && /坪高 /.test(out.text) && /低於全市/.test(out.notes.overview)) fail(`contradiction ${tag}`);
+      edge[out.sentences.length < 3 ? 'short' : 'full']++;
+      if (ctx.trailing && ctx.trailing.sample_count > 0 && ctx.trailing.sample_count < 5) edge.tiny++;
       const t = ctx.trailing;
       if (t && t.sample_count && t.p50_unit_price != null) {
         if (!out.text.includes(`每坪 ${t.p50_unit_price.toFixed(1)} 萬元`)) fail(`p50 mismatch ${market} ${month} ${district}`);
-        if (!out.text.includes(`共有 ${Math.round(t.sample_count).toLocaleString('en-US')} 筆`)) fail(`n mismatch ${market} ${month} ${district}`);
+        if (!out.text.includes(`共有 ${Math.round(t.sample_count).toLocaleString('en-US')} 筆`) && !out.text.includes(`僅有 ${Math.round(t.sample_count).toLocaleString('en-US')} 筆`)) fail(`n mismatch ${market} ${month} ${district}`);
         const sum = ctx.series.reduce((a, x) => a + (x.sample_count || 0), 0);
         if (sum !== t.sample_count) fail(`series sum ${sum} != trailing ${t.sample_count} ${market} ${month} ${district} ${window}`);
       }
@@ -63,5 +75,6 @@ for (const f of idx.files) {
     presaleFile: district ? presale[district] : undefined, population: district ? population : undefined }));
   if (out.text !== j.text) fail(`static mismatch ${f.file}`);
 }
+console.log(`edge cases: ${JSON.stringify(edge)}`);
 console.log(`summary runs=${runs} static=${idx.files.length} dup-name-checks=${dupChecks} fails=${fails} backfill-warnings=${warns}`);
 process.exit(fails ? 1 : 0);

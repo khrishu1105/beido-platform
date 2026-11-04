@@ -12,7 +12,7 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const VERSION = 1;
+  const VERSION = 2;
   const SAMPLE_MIN = 5;        // 少於 5 筆不計算漲跌（沿用方法論）
   const LOW_SAMPLE = 30;       // 期間樣本少於 30 筆加註「僅供參考」
   const MARKET_LABEL = { presale: '預售屋', resale: '中古屋' };
@@ -65,7 +65,19 @@
     const figures = { sample_count: n, window, start: range.start, end: range.end };
 
     if (!n || !isNum(t.p50_unit_price)) {
-      sentences.push(`${periodText}，${place}${label}沒有足夠的有效成交樣本，暫不提供行情摘要。`);
+      sentences.push(n
+        ? `${periodText}，${place}${label}有 ${fmtInt(n)} 筆成交但缺少可用單價，暫不提供行情摘要。`
+        : `${periodText}，${place}${label}沒有有效成交登錄，暫不提供行情摘要。`);
+      if (window < 36) sentences.push('可改選近 36 個月或切換市場別查看。');
+      return finish();
+    }
+    // 樣本極少（1–4 筆）：只報筆數與中位數，不做分位、全市比較與結構判讀，避免以偏概全
+    if (n < SAMPLE_MIN) {
+      figures.per_month = Math.round(n / window * 10) / 10;
+      figures.p50_unit = t.p50_unit_price; figures.p50_total = isNum(t.p50_total_price) ? t.p50_total_price : null;
+      sentences.push(`${periodText}，${place}${label}僅有 ${fmtInt(n)} 筆有效成交，成交單價中位數為每坪 ${fmt1(t.p50_unit_price)} 萬元。`);
+      sentences.push(`樣本少於 ${SAMPLE_MIN} 筆，不計算主力價位、全市比較與漲跌，數字僅反映個別成交。`);
+      if (window < 36) sentences.push('可改選近 36 個月取得較完整的樣本。');
       return finish();
     }
 
@@ -80,9 +92,16 @@
     sentences.push(s1 + '。');
 
     // 2 價（P25/P50/P75）
-    if (isNum(t.p25_unit_price) && isNum(t.p75_unit_price))
-      sentences.push(`成交單價中位數為每坪 ${fmt1(t.p50_unit_price)} 萬元，主力價位落在 ${fmt1(t.p25_unit_price)}～${fmt1(t.p75_unit_price)} 萬／坪（P25–P75）。`);
-    else sentences.push(`成交單價中位數為每坪 ${fmt1(t.p50_unit_price)} 萬元。`);
+    if (isNum(t.p25_unit_price) && isNum(t.p75_unit_price)) {
+      if (fmt1(t.p25_unit_price) === fmt1(t.p75_unit_price))
+        sentences.push(`成交單價中位數為每坪 ${fmt1(t.p50_unit_price)} 萬元，中間一半成交都集中在這個價位。`);
+      else {
+        let s2 = `成交單價中位數為每坪 ${fmt1(t.p50_unit_price)} 萬元，主力價位落在 ${fmt1(t.p25_unit_price)}～${fmt1(t.p75_unit_price)} 萬／坪（P25–P75）`;
+        const spread = t.p25_unit_price > 0 ? t.p75_unit_price / t.p25_unit_price : null;
+        if (spread != null && spread >= 1.8) s2 += `，高低價差達 ${spread.toFixed(1)} 倍，區內產品差異明顯`;
+        sentences.push(s2 + '。');
+      }
+    } else sentences.push(`成交單價中位數為每坪 ${fmt1(t.p50_unit_price)} 萬元。`);
 
     // 3 與全市同期比較
     const vs = district ? versusCity(t) : null;
@@ -91,7 +110,7 @@
       figures.city_p50_unit = t.city_median_unit_price;
       sentences.push(vs === 0
         ? `與桃園市同期中位數 ${fmt1(t.city_median_unit_price)} 萬／坪持平。`
-        : `與桃園市同期中位數 ${fmt1(t.city_median_unit_price)} 萬／坪相比，${vs > 0 ? '高' : '低'}出 ${pct(vs)}%。`);
+        : `比桃園市同期中位數 ${fmt1(t.city_median_unit_price)} 萬／坪${vs > 0 ? '高' : '低'} ${pct(vs)}%。`);
     }
 
     // 4 總價與坪數
@@ -106,17 +125,24 @@
     const types = topMix(t.type_mix, false);
     if (types.length) {
       const kind = market === 'presale' ? '房型' : '建物型態';
-      let s5 = `${kind}以${types[0].label}為主（${fmt1(types[0].percentage)}%）`;
-      if (types[1]) s5 += `，其次為${types[1].label}（${fmt1(types[1].percentage)}%）`;
+      let s5 = types.length === 1 || types[0].percentage >= 99.95
+        ? `${kind}全部為${types[0].label}`
+        : `${kind}以${types[0].label}為主（${fmt1(types[0].percentage)}%）`;
+      if (types[1] && types[0].percentage < 99.95) s5 += `，其次為${types[1].label}（${fmt1(types[1].percentage)}%）`;
       sentences.push(s5 + '。');
     }
 
     // 6 單月走勢（只在完整登錄月且樣本足夠時判讀）
     const mo = ctx.monthly || {};
-    if (ctx.monthComplete && isNum(mo.median_unit_price) && (mo.sample_count || 0) >= SAMPLE_MIN && isNum(mo.year_over_year)) {
-      sentences.push(`${monthText(month)}單月中位單價 ${fmt1(mo.median_unit_price)} 萬／坪，較去年同期${mo.year_over_year > 0 ? '上漲' : mo.year_over_year < 0 ? '下跌' : '持平'}${mo.year_over_year !== 0 ? ' ' + pct(mo.year_over_year) + '%' : ''}。`);
-    } else if (!ctx.monthComplete) {
+    if (!ctx.monthComplete) {
       sentences.push(`${monthText(month)}仍在登錄中，暫不做單月漲跌判讀。`);
+    } else if ((mo.sample_count || 0) < SAMPLE_MIN) {
+      sentences.push(`${monthText(month)}單月僅 ${fmtInt(mo.sample_count || 0)} 筆成交，暫不做單月漲跌判讀。`);
+    } else if (isNum(mo.median_unit_price) && isNum(mo.year_over_year)) {
+      const y = mo.year_over_year, flat = Math.abs(y) < 0.05;
+      let s6 = `${monthText(month)}單月中位單價 ${fmt1(mo.median_unit_price)} 萬／坪，較去年同期${flat ? '持平' : `${y > 0 ? '上漲' : '下跌'} ${pct(y)}%`}`;
+      if (Math.abs(y) >= 30) s6 += '（單月波動大，宜以期間值為準）';
+      sentences.push(s6 + '。');
     }
 
     // 7 樣本提醒
@@ -146,23 +172,33 @@
     const label = MARKET_LABEL[market] || market;
     const notes = {};
 
-    if (n && t && isNum(t.p50_unit_price)) {
+    if (n && n < SAMPLE_MIN && t && isNum(t.p50_unit_price)) {
+      notes.overview = `近 ${window} 個月僅 ${fmtInt(n)} 筆成交（中位 ${fmt1(t.p50_unit_price)} 萬／坪），樣本不足以判讀主力價位。`;
+    } else if (n && t && isNum(t.p50_unit_price)) {
       const vs = district ? versusCity(t) : null;
       notes.overview = vs == null
         ? `近 ${window} 個月中間一半成交落在 ${fmt1(t.p25_unit_price)}～${fmt1(t.p75_unit_price)} 萬／坪。`
         : `近 ${window} 個月中位單價 ${fmt1(t.p50_unit_price)} 萬／坪，${vs === 0 ? '與全市同期持平' : `${vs > 0 ? '高於' : '低於'}全市同期 ${pct(vs)}%`}。`;
-    } else notes.overview = `近 ${window} 個月樣本不足，暫無期間行情。`;
+    } else notes.overview = n ? `近 ${window} 個月缺少可用單價，暫無期間行情。` : `近 ${window} 個月沒有成交登錄，暫無期間行情。`;
 
     const series = (ctx.series || []).filter(x => x && isNum(x.sample_count));
     const priced = series.filter(x => isNum(x.median_unit_price) && x.sample_count >= SAMPLE_MIN);
+    const active = series.filter(x => x.sample_count > 0).length;
+    const gap = window - active;
+    const gapText = gap > 0 ? `期間內有 ${gap} 個月無成交登錄` : '';
     if (series.length && priced.length) {
       const peak = series.slice().sort((a, b) => b.sample_count - a.sample_count || a.month.localeCompare(b.month))[0];
       const lo = Math.min(...priced.map(x => x.median_unit_price)), hi = Math.max(...priced.map(x => x.median_unit_price));
-      notes.trend = `圖中單月中位單價介於 ${fmt1(lo)}～${fmt1(hi)} 萬／坪；成交量最高為 ${monthText(peak.month)}的 ${fmtInt(peak.sample_count)} 件。`;
-    } else notes.trend = `近 ${window} 個月沒有足夠的月度樣本可繪製走勢。`;
+      const priceText = priced.length === 1 || fmt1(lo) === fmt1(hi)
+        ? `圖中僅 ${monthText(priced[0].month)}樣本足夠，單月中位單價 ${fmt1(priced[0].median_unit_price)} 萬／坪`
+        : `圖中樣本足夠（≥${SAMPLE_MIN} 筆）的月份，單月中位單價介於 ${fmt1(lo)}～${fmt1(hi)} 萬／坪`;
+      notes.trend = `${priceText}；成交量最高為 ${monthText(peak.month)}的 ${fmtInt(peak.sample_count)} 件${gapText ? '；' + gapText : ''}。`;
+    } else if (active) notes.trend = `近 ${window} 個月共 ${fmtInt(active)} 個月有成交，但單月樣本都少於 ${SAMPLE_MIN} 筆，走勢僅供參考。`;
+    else notes.trend = `近 ${window} 個月沒有成交登錄，暫無走勢。`;
 
     const types = topMix(t && t.type_mix, false), floors = topMix(t && t.floor_mix, true);
-    if (types.length) {
+    if (types.length && n < SAMPLE_MIN) notes.structure = `近 ${window} 個月僅 ${fmtInt(n)} 筆成交，產品組成不具代表性。`;
+    else if (types.length) {
       let s = `${market === 'presale' ? '房型' : '建物型態'}以「${types[0].label}」占 ${fmt1(types[0].percentage)}% 最多`;
       if (floors.length) s += `，樓層以「${floors[0].label}」占 ${fmt1(floors[0].percentage)}% 最多`;
       notes.structure = s + '。';
@@ -172,7 +208,10 @@
     if (ctx.projects) {
       if (projects.length) {
         const top = projects.slice().sort((a, b) => b.count - a.count || (b.latest || '').localeCompare(a.latest || ''))[0];
-        notes.projects = `近 ${window} 個月共有 ${fmtInt(projects.length)} 個預售建案登錄簽約，成交最多為「${top.name}」${fmtInt(top.count)} 筆。`;
+        const nm = String(top.name).replace(/\?/g, '□');
+        notes.projects = projects.length === 1
+          ? `近 ${window} 個月只有「${nm}」1 個預售建案登錄簽約，共 ${fmtInt(top.count)} 筆。`
+          : `近 ${window} 個月共有 ${fmtInt(projects.length)} 個預售建案登錄簽約，成交最多為「${nm}」${fmtInt(top.count)} 筆。`;
       } else notes.projects = `近 ${window} 個月${place}沒有預售建案簽約登錄。`;
     }
 
