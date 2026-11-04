@@ -687,7 +687,7 @@ function bindRenderedEvents() {
   });
   $('#backToCity')?.addEventListener('click', () => navigate({district:''}));
   $('#crumbCity')?.addEventListener('click', e => { e.preventDefault(); navigate({district:''}); });
-  $$('.linked-project').forEach(el => el.addEventListener('click', () => navigate({project: el.dataset.pid})));
+  $$('.linked-project').forEach(el => el.addEventListener('click', () => { location.href = '/project/' + el.dataset.pid + '/'; }));
   $('#districtSelect')?.addEventListener('change', event => navigate({district: event.target.value}));
   $('#shareDistrict')?.addEventListener('click', sharePage);
   $('#openMap')?.addEventListener('click', () => { const d = $('#mapDialog'); if (d && d.showModal) { d.showModal(); $('#closeMap')?.focus(); } });
