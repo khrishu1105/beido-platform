@@ -216,5 +216,24 @@
     return out;
   }
 
-  return { VERSION, SAMPLE_MIN, build, addMonths, windowRange, versusCity, monthText, median, aggregateProjects };
+  // 組裝摘要輸入：瀏覽器與 Node 共用，保證同一組資料得到同一段文字
+  function context({ market, district, window, month, data, snapshot, presaleFile, population }) {
+    const meta = data.markets[market].meta;
+    const node = district ? ((snapshot && snapshot.districts) || {})[district] : (snapshot && snapshot.city);
+    const seriesAll = (district ? data.markets[market].series.districts[district] : data.markets[market].series.city) || [];
+    const { start } = windowRange(month, window);
+    const status = (meta.month_status || {})[month];
+    return {
+      district, market, window, month,
+      trailing: node ? node['trailing_' + window] : null,
+      monthly: node || {},
+      monthComplete: status ? status === 'complete' : true,
+      series: seriesAll.filter(x => x.month >= start && x.month <= month),
+      projects: presaleFile ? aggregateProjects(presaleFile, month, window) : undefined,
+      population: population && district && population.districts[district]
+        ? Object.assign({}, population.districts[district], { period: population.meta.period }) : undefined
+    };
+  }
+
+  return { VERSION, SAMPLE_MIN, build, context, addMonths, windowRange, versusCity, monthText, median, aggregateProjects };
 });
