@@ -678,7 +678,7 @@ function updateHero() {
   $('#headerFreshness').textContent = `資料更新 ${String(DATA.meta.updated_at).slice(0,10)}`;
   const d = state.project ? '' : state.district;
   document.body.dataset.view = state.project ? 'project' : d ? 'district' : 'city';
-  $('#heroTitle').innerHTML = d ? `${d}<em>房價行情</em>` : '看懂一座城市，<br>從每一筆<em>成交</em>開始。';
+  $('#heroTitle').innerHTML = d ? `${d}<em>房價行情</em>` : state.project ? `${state.district || '桃園市'}<em>建案實價登錄</em>` : '看懂一座城市，<br>從每一筆<em>成交</em>開始。';
   $('#heroEyebrow').textContent = d ? `Taoyuan · ${SLUGS[d].toUpperCase()} District` : 'Beedoo Market Desk · Taoyuan';
   $('#heroLede').textContent = d
     ? `${d}預售屋與中古屋的實價登錄行情：均價、成交量、主力價位、建案與人口，一頁看懂。`

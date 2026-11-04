@@ -684,3 +684,12 @@ body[data-view="district"] .content, body[data-view="project"] .content { paddin
 @media (max-width: 680px) {
   .presale-table td.rank, .presale-table th:first-child { display: none; }
 }
+@media (max-width: 680px) {
+  .presale-table { table-layout: fixed; }
+  .presale-table th:nth-child(2) { width: 44%; }
+  .presale-table th:nth-child(3) { width: 16%; }
+  .presale-table th:nth-child(4) { width: 24%; }
+  .presale-table th:nth-child(5) { width: 16%; }
+  .presale-table td.num, .presale-table th.num { white-space: normal; font-size: 11.5px; }
+  .proj-link { word-break: break-all; }
+}

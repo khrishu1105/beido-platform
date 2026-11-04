@@ -30,20 +30,5 @@ export function writeText(rel, text) {
   fs.writeFileSync(file, text);
 }
 
-// 與前端一致的摘要輸入組裝
-export function summaryContext({ market, district, window, month, data, snapshot, presaleFile, population }) {
-  const meta = data.markets[market].meta;
-  const node = district ? (snapshot.districts || {})[district] : snapshot.city;
-  const seriesAll = district ? data.markets[market].series.districts[district] : data.markets[market].series.city;
-  const { start } = Summary.windowRange(month, window);
-  const series = seriesAll.filter(x => x.month >= start && x.month <= month);
-  return {
-    district, market, window, month,
-    trailing: node ? node['trailing_' + window] : null,
-    monthly: node || {},
-    monthComplete: (meta.month_status || {})[month] ? meta.month_status[month] === 'complete' : true,
-    series,
-    projects: presaleFile ? Summary.aggregateProjects(presaleFile, month, window) : undefined,
-    population: population ? { ...population.districts[district], period: population.meta.period } : undefined
-  };
-}
+// 與前端一致的摘要輸入組裝（實作在 assets/summary.js）
+export const summaryContext = args => Summary.context(args);
