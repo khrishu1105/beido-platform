@@ -1,0 +1,787 @@
+{
+ "generated_at": "2026-11-04T04:21:50Z",
+ "source": "內政部不動產交易實價查詢服務網（實價登錄）",
+ "count": 78,
+ "articles": [
+  {
+   "file": "桃園區_resale_12.json",
+   "id": "桃園區_resale_12",
+   "district": "桃園區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "桃園區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "桃園區_resale_24.json",
+   "id": "桃園區_resale_24",
+   "district": "桃園區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "桃園區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "桃園區_resale_36.json",
+   "id": "桃園區_resale_36",
+   "district": "桃園區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "桃園區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "中壢區_resale_12.json",
+   "id": "中壢區_resale_12",
+   "district": "中壢區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "中壢區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "中壢區_resale_24.json",
+   "id": "中壢區_resale_24",
+   "district": "中壢區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "中壢區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "中壢區_resale_36.json",
+   "id": "中壢區_resale_36",
+   "district": "中壢區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "中壢區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "平鎮區_resale_12.json",
+   "id": "平鎮區_resale_12",
+   "district": "平鎮區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "平鎮區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "平鎮區_resale_24.json",
+   "id": "平鎮區_resale_24",
+   "district": "平鎮區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "平鎮區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "平鎮區_resale_36.json",
+   "id": "平鎮區_resale_36",
+   "district": "平鎮區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "平鎮區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "八德區_resale_12.json",
+   "id": "八德區_resale_12",
+   "district": "八德區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "八德區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "八德區_resale_24.json",
+   "id": "八德區_resale_24",
+   "district": "八德區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "八德區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "八德區_resale_36.json",
+   "id": "八德區_resale_36",
+   "district": "八德區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "八德區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "楊梅區_resale_12.json",
+   "id": "楊梅區_resale_12",
+   "district": "楊梅區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "楊梅區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "楊梅區_resale_24.json",
+   "id": "楊梅區_resale_24",
+   "district": "楊梅區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "楊梅區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "楊梅區_resale_36.json",
+   "id": "楊梅區_resale_36",
+   "district": "楊梅區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "楊梅區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "蘆竹區_resale_12.json",
+   "id": "蘆竹區_resale_12",
+   "district": "蘆竹區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "蘆竹區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "蘆竹區_resale_24.json",
+   "id": "蘆竹區_resale_24",
+   "district": "蘆竹區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "蘆竹區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "蘆竹區_resale_36.json",
+   "id": "蘆竹區_resale_36",
+   "district": "蘆竹區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "蘆竹區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "龜山區_resale_12.json",
+   "id": "龜山區_resale_12",
+   "district": "龜山區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "龜山區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "龜山區_resale_24.json",
+   "id": "龜山區_resale_24",
+   "district": "龜山區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "龜山區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "龜山區_resale_36.json",
+   "id": "龜山區_resale_36",
+   "district": "龜山區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "龜山區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "大園區_resale_12.json",
+   "id": "大園區_resale_12",
+   "district": "大園區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "大園區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "大園區_resale_24.json",
+   "id": "大園區_resale_24",
+   "district": "大園區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "大園區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "大園區_resale_36.json",
+   "id": "大園區_resale_36",
+   "district": "大園區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "大園區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "大溪區_resale_12.json",
+   "id": "大溪區_resale_12",
+   "district": "大溪區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "大溪區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "大溪區_resale_24.json",
+   "id": "大溪區_resale_24",
+   "district": "大溪區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "大溪區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "大溪區_resale_36.json",
+   "id": "大溪區_resale_36",
+   "district": "大溪區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "大溪區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "龍潭區_resale_12.json",
+   "id": "龍潭區_resale_12",
+   "district": "龍潭區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "龍潭區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "龍潭區_resale_24.json",
+   "id": "龍潭區_resale_24",
+   "district": "龍潭區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "龍潭區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "龍潭區_resale_36.json",
+   "id": "龍潭區_resale_36",
+   "district": "龍潭區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "龍潭區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "觀音區_resale_12.json",
+   "id": "觀音區_resale_12",
+   "district": "觀音區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "觀音區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "觀音區_resale_24.json",
+   "id": "觀音區_resale_24",
+   "district": "觀音區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "觀音區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "觀音區_resale_36.json",
+   "id": "觀音區_resale_36",
+   "district": "觀音區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "觀音區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "新屋區_resale_12.json",
+   "id": "新屋區_resale_12",
+   "district": "新屋區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "新屋區中古屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "新屋區_resale_24.json",
+   "id": "新屋區_resale_24",
+   "district": "新屋區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "新屋區中古屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "新屋區_resale_36.json",
+   "id": "新屋區_resale_36",
+   "district": "新屋區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "新屋區中古屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "復興區_resale_12.json",
+   "id": "復興區_resale_12",
+   "district": "復興區",
+   "market": "resale",
+   "window_months": 12,
+   "title": "復興區中古屋房價分析（近 12 個月）",
+   "status": "preparing",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "復興區_resale_24.json",
+   "id": "復興區_resale_24",
+   "district": "復興區",
+   "market": "resale",
+   "window_months": 24,
+   "title": "復興區中古屋房價分析（近 24 個月）",
+   "status": "preparing",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "復興區_resale_36.json",
+   "id": "復興區_resale_36",
+   "district": "復興區",
+   "market": "resale",
+   "window_months": 36,
+   "title": "復興區中古屋房價分析（近 36 個月）",
+   "status": "preparing",
+   "as_of": "2026-03"
+  },
+  {
+   "file": "桃園區_presale_12.json",
+   "id": "桃園區_presale_12",
+   "district": "桃園區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "桃園區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "桃園區_presale_24.json",
+   "id": "桃園區_presale_24",
+   "district": "桃園區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "桃園區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "桃園區_presale_36.json",
+   "id": "桃園區_presale_36",
+   "district": "桃園區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "桃園區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "中壢區_presale_12.json",
+   "id": "中壢區_presale_12",
+   "district": "中壢區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "中壢區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "中壢區_presale_24.json",
+   "id": "中壢區_presale_24",
+   "district": "中壢區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "中壢區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "中壢區_presale_36.json",
+   "id": "中壢區_presale_36",
+   "district": "中壢區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "中壢區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "平鎮區_presale_12.json",
+   "id": "平鎮區_presale_12",
+   "district": "平鎮區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "平鎮區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "平鎮區_presale_24.json",
+   "id": "平鎮區_presale_24",
+   "district": "平鎮區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "平鎮區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "平鎮區_presale_36.json",
+   "id": "平鎮區_presale_36",
+   "district": "平鎮區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "平鎮區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "八德區_presale_12.json",
+   "id": "八德區_presale_12",
+   "district": "八德區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "八德區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "八德區_presale_24.json",
+   "id": "八德區_presale_24",
+   "district": "八德區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "八德區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "八德區_presale_36.json",
+   "id": "八德區_presale_36",
+   "district": "八德區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "八德區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "楊梅區_presale_12.json",
+   "id": "楊梅區_presale_12",
+   "district": "楊梅區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "楊梅區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "楊梅區_presale_24.json",
+   "id": "楊梅區_presale_24",
+   "district": "楊梅區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "楊梅區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "楊梅區_presale_36.json",
+   "id": "楊梅區_presale_36",
+   "district": "楊梅區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "楊梅區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "蘆竹區_presale_12.json",
+   "id": "蘆竹區_presale_12",
+   "district": "蘆竹區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "蘆竹區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "蘆竹區_presale_24.json",
+   "id": "蘆竹區_presale_24",
+   "district": "蘆竹區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "蘆竹區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "蘆竹區_presale_36.json",
+   "id": "蘆竹區_presale_36",
+   "district": "蘆竹區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "蘆竹區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "龜山區_presale_12.json",
+   "id": "龜山區_presale_12",
+   "district": "龜山區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "龜山區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "龜山區_presale_24.json",
+   "id": "龜山區_presale_24",
+   "district": "龜山區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "龜山區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "龜山區_presale_36.json",
+   "id": "龜山區_presale_36",
+   "district": "龜山區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "龜山區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "大園區_presale_12.json",
+   "id": "大園區_presale_12",
+   "district": "大園區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "大園區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "大園區_presale_24.json",
+   "id": "大園區_presale_24",
+   "district": "大園區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "大園區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "大園區_presale_36.json",
+   "id": "大園區_presale_36",
+   "district": "大園區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "大園區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "大溪區_presale_12.json",
+   "id": "大溪區_presale_12",
+   "district": "大溪區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "大溪區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "大溪區_presale_24.json",
+   "id": "大溪區_presale_24",
+   "district": "大溪區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "大溪區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "大溪區_presale_36.json",
+   "id": "大溪區_presale_36",
+   "district": "大溪區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "大溪區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "龍潭區_presale_12.json",
+   "id": "龍潭區_presale_12",
+   "district": "龍潭區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "龍潭區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "龍潭區_presale_24.json",
+   "id": "龍潭區_presale_24",
+   "district": "龍潭區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "龍潭區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "龍潭區_presale_36.json",
+   "id": "龍潭區_presale_36",
+   "district": "龍潭區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "龍潭區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "觀音區_presale_12.json",
+   "id": "觀音區_presale_12",
+   "district": "觀音區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "觀音區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "觀音區_presale_24.json",
+   "id": "觀音區_presale_24",
+   "district": "觀音區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "觀音區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "觀音區_presale_36.json",
+   "id": "觀音區_presale_36",
+   "district": "觀音區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "觀音區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "新屋區_presale_12.json",
+   "id": "新屋區_presale_12",
+   "district": "新屋區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "新屋區預售屋房價分析（近 12 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "新屋區_presale_24.json",
+   "id": "新屋區_presale_24",
+   "district": "新屋區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "新屋區預售屋房價分析（近 24 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "新屋區_presale_36.json",
+   "id": "新屋區_presale_36",
+   "district": "新屋區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "新屋區預售屋房價分析（近 36 個月）",
+   "status": "ok",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "復興區_presale_12.json",
+   "id": "復興區_presale_12",
+   "district": "復興區",
+   "market": "presale",
+   "window_months": 12,
+   "title": "復興區預售屋房價分析（近 12 個月）",
+   "status": "preparing",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "復興區_presale_24.json",
+   "id": "復興區_presale_24",
+   "district": "復興區",
+   "market": "presale",
+   "window_months": 24,
+   "title": "復興區預售屋房價分析（近 24 個月）",
+   "status": "preparing",
+   "as_of": "2026-04"
+  },
+  {
+   "file": "復興區_presale_36.json",
+   "id": "復興區_presale_36",
+   "district": "復興區",
+   "market": "presale",
+   "window_months": 36,
+   "title": "復興區預售屋房價分析（近 36 個月）",
+   "status": "preparing",
+   "as_of": "2026-04"
+  }
+ ]
+}
