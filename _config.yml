@@ -1,0 +1,6 @@
+# GitHub Pages (Jekyll)：只發布網頁與前端資料
+exclude:
+  - tools
+  - "完成報告.md"
+  - project_aliases.json
+  - report-assets

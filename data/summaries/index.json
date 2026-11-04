@@ -1,0 +1,594 @@
+{
+ "version": 2,
+ "generated_at": "2026-09-10 18:15",
+ "files": [
+  {
+   "file": "city_resale_12.json",
+   "district": "桃園市",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "zhongli_resale_12.json",
+   "district": "中壢區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "bade_resale_12.json",
+   "district": "八德區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "dayuan_resale_12.json",
+   "district": "大園區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "daxi_resale_12.json",
+   "district": "大溪區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "pingzhen_resale_12.json",
+   "district": "平鎮區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "fuxing_resale_12.json",
+   "district": "復興區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "xinwu_resale_12.json",
+   "district": "新屋區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "taoyuan_resale_12.json",
+   "district": "桃園區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "yangmei_resale_12.json",
+   "district": "楊梅區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "luzhu_resale_12.json",
+   "district": "蘆竹區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "guanyin_resale_12.json",
+   "district": "觀音區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "longtan_resale_12.json",
+   "district": "龍潭區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "guishan_resale_12.json",
+   "district": "龜山區",
+   "market": "resale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "city_resale_24.json",
+   "district": "桃園市",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "zhongli_resale_24.json",
+   "district": "中壢區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "bade_resale_24.json",
+   "district": "八德區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "dayuan_resale_24.json",
+   "district": "大園區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "daxi_resale_24.json",
+   "district": "大溪區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "pingzhen_resale_24.json",
+   "district": "平鎮區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "fuxing_resale_24.json",
+   "district": "復興區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "xinwu_resale_24.json",
+   "district": "新屋區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "taoyuan_resale_24.json",
+   "district": "桃園區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "yangmei_resale_24.json",
+   "district": "楊梅區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "luzhu_resale_24.json",
+   "district": "蘆竹區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "guanyin_resale_24.json",
+   "district": "觀音區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "longtan_resale_24.json",
+   "district": "龍潭區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "guishan_resale_24.json",
+   "district": "龜山區",
+   "market": "resale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "city_resale_36.json",
+   "district": "桃園市",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "zhongli_resale_36.json",
+   "district": "中壢區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "bade_resale_36.json",
+   "district": "八德區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "dayuan_resale_36.json",
+   "district": "大園區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "daxi_resale_36.json",
+   "district": "大溪區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "pingzhen_resale_36.json",
+   "district": "平鎮區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "fuxing_resale_36.json",
+   "district": "復興區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "xinwu_resale_36.json",
+   "district": "新屋區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "taoyuan_resale_36.json",
+   "district": "桃園區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "yangmei_resale_36.json",
+   "district": "楊梅區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "luzhu_resale_36.json",
+   "district": "蘆竹區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "guanyin_resale_36.json",
+   "district": "觀音區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "longtan_resale_36.json",
+   "district": "龍潭區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "guishan_resale_36.json",
+   "district": "龜山區",
+   "market": "resale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "city_presale_12.json",
+   "district": "桃園市",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "zhongli_presale_12.json",
+   "district": "中壢區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "bade_presale_12.json",
+   "district": "八德區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "dayuan_presale_12.json",
+   "district": "大園區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "daxi_presale_12.json",
+   "district": "大溪區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "pingzhen_presale_12.json",
+   "district": "平鎮區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "fuxing_presale_12.json",
+   "district": "復興區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "xinwu_presale_12.json",
+   "district": "新屋區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "taoyuan_presale_12.json",
+   "district": "桃園區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "yangmei_presale_12.json",
+   "district": "楊梅區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "luzhu_presale_12.json",
+   "district": "蘆竹區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "guanyin_presale_12.json",
+   "district": "觀音區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "longtan_presale_12.json",
+   "district": "龍潭區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "guishan_presale_12.json",
+   "district": "龜山區",
+   "market": "presale",
+   "window": 12,
+   "month": "2026-04"
+  },
+  {
+   "file": "city_presale_24.json",
+   "district": "桃園市",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "zhongli_presale_24.json",
+   "district": "中壢區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "bade_presale_24.json",
+   "district": "八德區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "dayuan_presale_24.json",
+   "district": "大園區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "daxi_presale_24.json",
+   "district": "大溪區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "pingzhen_presale_24.json",
+   "district": "平鎮區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "fuxing_presale_24.json",
+   "district": "復興區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "xinwu_presale_24.json",
+   "district": "新屋區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "taoyuan_presale_24.json",
+   "district": "桃園區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "yangmei_presale_24.json",
+   "district": "楊梅區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "luzhu_presale_24.json",
+   "district": "蘆竹區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "guanyin_presale_24.json",
+   "district": "觀音區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "longtan_presale_24.json",
+   "district": "龍潭區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "guishan_presale_24.json",
+   "district": "龜山區",
+   "market": "presale",
+   "window": 24,
+   "month": "2026-04"
+  },
+  {
+   "file": "city_presale_36.json",
+   "district": "桃園市",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "zhongli_presale_36.json",
+   "district": "中壢區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "bade_presale_36.json",
+   "district": "八德區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "dayuan_presale_36.json",
+   "district": "大園區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "daxi_presale_36.json",
+   "district": "大溪區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "pingzhen_presale_36.json",
+   "district": "平鎮區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "fuxing_presale_36.json",
+   "district": "復興區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "xinwu_presale_36.json",
+   "district": "新屋區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "taoyuan_presale_36.json",
+   "district": "桃園區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "yangmei_presale_36.json",
+   "district": "楊梅區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "luzhu_presale_36.json",
+   "district": "蘆竹區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "guanyin_presale_36.json",
+   "district": "觀音區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "longtan_presale_36.json",
+   "district": "龍潭區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  },
+  {
+   "file": "guishan_presale_36.json",
+   "district": "龜山區",
+   "market": "presale",
+   "window": 36,
+   "month": "2026-04"
+  }
+ ]
+}
